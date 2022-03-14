@@ -2,14 +2,50 @@
  * This can be added to any route to check for an authenticated user
  */
 import { redisClient  } from '../index';
+import jwt from 'jsonwebtoken';
 import {Request, Response, NextFunction} from 'express';
-const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
-  //get token
-  const secret = await redisClient?.get('')
-  //validate token using redis stuff
 
-  //401 not auth if not auth
-  next();
+interface Req extends Request {
+  session: {
+    email: string,
+    username: string,
+    id: string
+  };
+}
+
+type session = {
+  email: string,
+  username: string,
+  id: string
+};
+
+const checkAuth = async (req: Req, res: Response, next: NextFunction) => {
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')
+  && req.headers.id
+  ){
+    try {
+      token = req.headers.authorization.split(' ')[1]
+      const id: string = req.headers.id as string;
+
+      const sec = await redisClient?.get(id)
+      if (sec){
+        const secret = JSON.parse(sec)
+        //validate token using redis stuff
+        const decoded = jwt.verify(token, secret)
+        // map containing email, username, id
+        req.session = decoded as session
+      }else{
+        throw new Error('Not authorized, token failed')
+      }
+      next()
+    } catch (error) {
+      console.error(error)
+      res.status(401)
+      throw new Error('Not authorized, token failed')
+    }
+  }
 }
 
 export default checkAuth;
