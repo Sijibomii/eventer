@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+        - name: users
+          image: sijibomi/users
+          env:
+            - name: POSTGRES_DB #name of env i.e pod will access the env with this name
+              valueFrom: 
+                secretKeyRef:
+                  name: USERS_DB_CONFIG #name of secret to get value from
+                  key: POSTGRES_DB #name of key in secret
+            - name: POSTGRES_USER
+              valueFrom: 
+                secretKeyRef:
+                  name: USERS_DB_CONFIG
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: USERS_DB_CONFIG
+                  key: POSTGRES_PASSWORD
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  targetPort: 8080
+  selector:
+  app: users
