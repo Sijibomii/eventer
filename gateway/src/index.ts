@@ -1,7 +1,7 @@
 import createError  from "http-errors";
 import express, {Request, Response, NextFunction, Errback}  from "express";
 import  indexRouter  from './routes';
-import redis,{ RedisClientType } from 'redis';
+import redis , { RedisClientType } from 'redis';
 
 type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
