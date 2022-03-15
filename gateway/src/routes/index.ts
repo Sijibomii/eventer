@@ -17,7 +17,7 @@ router.post('/auth/signup', function(req, res, next){
   userServiceProxy(req, res, next)
 });
 
-router.post('/auth/me',function(req, res, next){
+router.get('/auth/me',function(req, res, next){
   userServiceProxy(req, res, next)
 });
 
