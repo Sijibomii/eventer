@@ -31,9 +31,10 @@ const checkAuth = async (req: Req, res: Response, next: NextFunction) => {
 
       const sec = await redisClient?.get(id)
       if (sec){
+        // map containing access and refresh secrets
         const secret = JSON.parse(sec)
         //validate token using redis stuff
-        const decoded = jwt.verify(token, secret)
+        const decoded = jwt.verify(token, secret.access_secret)
         // map containing email, username, id
         req.session = decoded as session
       }else{

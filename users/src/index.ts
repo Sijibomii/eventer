@@ -7,6 +7,9 @@ import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './middleware/NotfoundError';
 
 const __dirname = path.resolve();
+type redisClientType = RedisClientType | null;
+let redisClient: redisClientType = null;
+
 const main = async() => {
   const app = express();
   app.set('trust proxy', true);
@@ -25,7 +28,7 @@ const main = async() => {
   await conn.runMigrations();
   console.log('ran')
 
-  const redisClient = redis.createClient({
+  redisClient = redis.createClient({
     url: 'redis://YOUR REDIS INSTANCE URL'
   })
 
@@ -50,3 +53,5 @@ const main = async() => {
 main().catch((err)=>{
   console.log(err)
 });
+
+export { redisClient };

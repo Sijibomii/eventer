@@ -8,8 +8,8 @@ let redisClient: redisClientType = null;
 
 const main = async () => {
   const app = express();
-
-  const redisClient = redis.createClient({
+s
+  redisClient = redis.createClient({
     url: 'redis://YOUR REDIS INSTANCE URL'
   })
 
