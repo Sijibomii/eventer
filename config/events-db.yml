@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-db-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: events-db
+  template:
+    metadata:
+      labels:
+        app: events-db
+    spec:
+      containers:
+        - name: events-db
+          image: cassandra:4.0
+          env:
+           
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: events-db-srv
+spec:
+  selector:
+    app: events-db
+  ports:
+    - name: db
+      protocol: TCP
+      port: 7000
+      targetPort: 7000

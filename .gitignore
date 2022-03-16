@@ -5,3 +5,11 @@ users/node_modules
 users/dist
 
 user_db.env
+
+events/__pycache__
+events/env
+events/.env
+events/media
+events/scripts/flow/*/.flowconfig
+events/.flowconfig
+events/events_env
