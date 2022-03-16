@@ -7,7 +7,7 @@ type tokenData = {
 }
 //email, username, id
 //generate access and refresh
-const generateToken = (data: tokenData) => {
+const generateToken = async (data: tokenData) => {
   const sec = await redisClient?.get(data.id)
   let access_secret = null;
   let refresh_secret= null
@@ -36,8 +36,7 @@ const generateToken = (data: tokenData) => {
 }
 
 const randomString = () => {
-  const base = [...allCapsAlpha, ...allNumbers, ...allLowerAlpha, ...allUniqueChars];
-  const length = 64;
+  const len = 64;
   const allCapsAlpha = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"]; 
   const allLowerAlpha = [..."abcdefghijklmnopqrstuvwxyz"]; 
   const allUniqueChars = [..."~!@#$%^&*?"];

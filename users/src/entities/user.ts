@@ -5,16 +5,14 @@ import {
   UpdateDateColumn,
   Column,
   BaseEntity,
-  OneToMany,
 } from "typeorm";
 
 
 @Entity()
 export class User extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({ unique: true })
   username!: string;
@@ -26,12 +24,9 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  
-  @Field(() => String)
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => String)
   @UpdateDateColumn()
   updatedAt: Date;
 }

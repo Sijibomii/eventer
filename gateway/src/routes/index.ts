@@ -19,7 +19,7 @@ router.post('/auth/signup',function(req, res, next){
   userServiceProxy(req, res, next)
 });
 
-router.get('/auth/me', function(req, res, next){
+router.get('/auth/me', checkAuth ,function(req, res, next){
   // this should be handled by gateway.. decode token and return data
 });
 //get a more detailed 
