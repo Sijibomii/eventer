@@ -5,19 +5,6 @@ import argon2 from "argon2";
 import generateToken  from '../utils/generateToken';
 const router = Router();
 
-interface Req extends Request {
-  session: {
-    email: string,
-    username: string,
-    id: string
-  };
-}
-
-type session = {
-  email: string,
-  username: string,
-  id: string
-};
 router.post('/auth/login', async function  (req, res) {
   // handle shit here
   const { email, password } = req.body;

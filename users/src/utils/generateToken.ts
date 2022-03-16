@@ -44,7 +44,7 @@ const randomString = () => {
   const base = [...allCapsAlpha, ...allNumbers, ...allLowerAlpha, ...allUniqueChars];
 
   return [...Array(len)]
-      .map(i => base[Math.random()*base.length|0])
+      .map(_ => base[Math.random()*base.length|0])
       .join('');
 }
 

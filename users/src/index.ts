@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { createConnection } from "typeorm";
 import path from "path";
 import redis , { RedisClientType } from 'redis';
@@ -39,7 +39,7 @@ const main = async() => {
     throw new Error('REDIS MUST BE DEFINED');
   }
 
-  app.all('*', async (req: Request, res: Response ) => {
+  app.all('*', async (_,__) => {
     throw new NotFoundError();
   });
   
