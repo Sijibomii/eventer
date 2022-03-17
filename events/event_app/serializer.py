@@ -4,7 +4,7 @@ from .models import Events,Photos
 
 class PhotosSerializer(serializers.ModelSerializer):
   class Meta:
-    model = Photo
+    model = Photos
     fields = '__all__'
     read_only_fields = ('id',)
 

@@ -1,32 +1,31 @@
-#looks like default details are cassandra
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: events-db-depl
+  name: redis-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: events-db
+      app: redis
   template:
     metadata:
       labels:
-        app: events-db
+        app: redis
     spec:
       containers:
-        - name: events-db
-          image: cassandra:4.0
+        - name: redis
+          image: redis:6-alpine
            
 ---
 apiVersion: v1
 kind: Service 
 metadata:
-  name: events-db-srv
+  name: redis-srv
 spec:
   selector:
-    app: events-db
+    app: redis
   ports:
     - name: db
       protocol: TCP
-      port: 7000
-      targetPort: 7000
+      port: 6379
+      targetPort: 6379

@@ -1,11 +1,11 @@
 from django.urls import path
 
-from .views import EventView
+from .views import get_events_by_creator, add_events
 
 
 app_name = 'events'
 
 urlpatterns = [
-    path('', EventView.as_view({'get': 'list'}), name='trip_list'),
-    path('<uuid:trip_id>/', EventView.as_view({'get': 'retrieve'}), name='trip_detail'),
+  path('<uuid:creator_id>/', get_events_by_creator , name='event_creator'),
+  path('', add_events, name='events_add')
 ]

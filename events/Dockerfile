@@ -20,3 +20,5 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY . .
+
+##remember to startup consumer in manage.py?

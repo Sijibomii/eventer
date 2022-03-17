@@ -33,6 +33,11 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
+## RABBIT MQ SHIT
+RABBITS_USERNAME = os.environ['RABBITS_USERNAME']
+RABBITS_PASSWORD = os.environ['RABBITS_PASSWORD']
+RABBITS_HOST = os.environ['RABBITS_HOST']
+RABBITS_PORT = os.environ['RABBITS_PORT']
 
 # Application definition
 

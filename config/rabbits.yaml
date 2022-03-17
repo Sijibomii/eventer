@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbits-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbits
+  template:
+    metadata:
+      labels:
+        app: rabbits
+    spec:
+      containers:
+        - name: rabbits
+          image: rabbitmq:3-management-alpine
+          env:
+            - name: RABBITMQ_DEFAULT_USER #name of env i.e pod will access the env with this name
+              valueFrom: 
+                secretKeyRef:
+                  name: RABBITS_CONFIG #name of secret to get value from
+                  key: RABBITMQ_DEFAULT_USER #name of key in secret
+            - name: RABBITMQ_DEFAULT_PASS 
+              valueFrom: 
+                secretKeyRef:
+                  name: RABBITS_CONFIG 
+                  key: RABBITMQ_DEFAULT_PASS 
+            - name: RABBITMQ_ERLANG_COOKIE
+              value: erlang_dev_only_cookie
+           
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: rabbits-srv
+spec:
+  selector:
+    app: rabbits
+  ports:
+    - name: rabbit
+      protocol: TCP
+      port: 5672
+      targetPort: 5672

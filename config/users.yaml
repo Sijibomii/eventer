@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: sijibomi/users #TODO: imahe pull secret to auth with docker
+          image: sijibomi/users #TODO: image pull secret to auth with docker
           env:
             - name: POSTGRES_DB #name of env i.e pod will access the env with this name
               valueFrom: 
