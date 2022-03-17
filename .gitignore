@@ -13,3 +13,12 @@ events/media
 events/scripts/flow/*/.flowconfig
 events/.flowconfig
 events/events_env
+
+
+search/__pycache__
+search/env
+search/.env
+search/media
+search/scripts/flow/*/.flowconfig
+search/.flowconfig
+search/search_env

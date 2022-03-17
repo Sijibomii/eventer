@@ -1,3 +1,4 @@
 python-dotenv==0.15.0
 pika
 elasticsearch
+elasticsearch_dsl
