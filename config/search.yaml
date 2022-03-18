@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: search
+  template:
+    metadata:
+      labels:
+        app: search
+    spec:
+      containers:
+        - name: search
+          image: sijibomi/search #TODO: image pull secret to auth with docker
+          env:
+            - name: SECRET_KEY
+              valueFrom: 
+                secretKeyRef:
+                  name: SEARCH_DB_CONFIG #name of secret to get value from
+                  key: SECRET_KEY #name of key in secret
+            - name: DEBUG
+              valueFrom: 
+                secretKeyRef:
+                  name: SEARCH_DB_CONFIG #name of secret to get value from
+                  key: DEBUG #name of key in secret
+            - name: ALLOWED_HOSTS 
+              valueFrom:
+                secretKeyRef:
+                  name: SEARCH_DB_CONFIG
+                  key: ALLOWED_HOSTS
+            - name: ELASTICSEARCH_HOST_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: SEARCH_DB_CONFIG
+                  key: ELASTICSEARCH_HOST_PORT
+            
+            
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: search-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  targetPort: 8080
+  selector:
+  app: search

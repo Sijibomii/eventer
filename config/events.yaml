@@ -22,7 +22,7 @@ spec:
             - name: SECRET_KEY
               valueFrom: 
                 secretKeyRef:
-                  name: EVENTS_BD_CONFIG #name of secret to get value from
+                  name: EVENTS_DB_CONFIG #name of secret to get value from
                   key: SECRET_KEY #name of key in secret
             - name: SQL_ENGINE
               valueFrom: 
@@ -68,12 +68,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: RABBITS_CONFIG
-                  key: RABBITS_HOST
+                  key: RABBITS_HOST 
             - name: RABBITS_PORT
               valueFrom:
                 secretKeyRef:
                   name: RABBITS_CONFIG
                   key: RABBITS_PORT
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: ALLOWED_HOSTS
             
 
 ---

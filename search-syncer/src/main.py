@@ -2,6 +2,7 @@ import pika
 import os
 from .connect import connect_elasticsearch
 from .document import Event
+
 RABBITS_USERNAME = os.environ['RABBITS_USERNAME']
 RABBITS_PASSWORD = os.environ['RABBITS_PASSWORD']
 RABBITS_HOST = os.environ['RABBITS_HOST']

@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'search.wsgi.application'
 
 ELASTICSEARCH_DSL={
     'default': {
-        'hosts': os.environ['ELASTICSEARCH_HOST']
+        'hosts': os.environ['ELASTICSEARCH_HOST_PORT']
     },
 }
 

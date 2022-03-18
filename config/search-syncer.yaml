@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-syncer-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: search-syncer
+  template:
+    metadata:
+      labels:
+        app: search-syncer
+    spec:
+      containers:
+        - name: search-syncer
+          image: sijibomi/search-syncer #TODO: image pull secret to auth with docker
+          env:
+            - name: RABBITS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_USERNAME
+            - name: RABBITS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_PASSWORD
+            - name: RABBITS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_HOST 
+            - name: RABBITS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_PORT
+            - name: ELASTICSEARCH_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: SEARCH_DB_CONFIG
+                  key: ELASTICSEARCH_HOST
+            - name: ELASTICSEARCH_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: SEARCH_DB_CONFIG
+                  key: ELASTICSEARCH_PORT
