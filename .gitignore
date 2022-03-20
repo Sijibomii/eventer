@@ -53,3 +53,6 @@ terraform/*_override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+
+
+jenkins/sijibomi-eventer-243-dd429f9dd3a1.json
