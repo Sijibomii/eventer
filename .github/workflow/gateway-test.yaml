@@ -26,3 +26,20 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push sijibomi242/eventer-gateway-dev
+      - name: Create Pull Request
+        id: sxxidhuhfiehijij
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+          commit-message: ${{ github.event.head_commit.message }}
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: dev
+          delete-branch: false
+          title: ${{ github.event.head_commit.message }}
+          labels: |
+            report
+            automated pr
+          assignees: sijibomii
+          reviewers: sijibomii
+          base: pre-prod
