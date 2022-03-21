@@ -8,11 +8,12 @@ rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 yum install -y jenkins
 chkconfig jenkins on
 
+
 echo "Install git"
 yum install -y git
 
 echo "Setup SSH key"
-mkdir /var/lib/jenkins/.ssh
+mkdir -p /var/lib/jenkins/.ssh
 touch /var/lib/jenkins/.ssh/known_hosts
 chown -R jenkins:jenkins /var/lib/jenkins/.ssh
 chmod 700 /var/lib/jenkins/.ssh

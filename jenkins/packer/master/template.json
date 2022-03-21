@@ -1,9 +1,9 @@
 {
     "variables" : {
-        "service_account" : "SERVICE ACCOUNT FILE",
-        "project": "GCP PROJECT ID",
-        "zone": "ZONE ID",
-        "ssh_key" : "PRIVATE SSH KEY"
+        "service_account" : "../../eventer-jenkins-cluster-f8bd7a6e0d54.json",
+        "project": "eventer-jenkins-cluster",
+        "zone": "us-central1-a",
+        "ssh_key" : "./ssh"
     },
     "builders" : [
         {
@@ -11,7 +11,7 @@
             "image_name" : "jenkins-master-v22041",
             "account_file": "{{user `service_account`}}",
             "project_id": "{{user `project`}}",
-            "source_image_family": "centos-8",
+            "source_image": "centos-stream-8-v20220317",
             "ssh_username": "packer",
             "zone": "{{user `zone`}}"
         }
