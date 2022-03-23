@@ -13,7 +13,7 @@ resource "google_compute_firewall" "allow_ssh_to_worker" {
 
 // Jenkins workers startup script
 data "template_file" "jenkins_worker_startup_script" {
-  template = "${file("scripts/join-cluster.tpl")}"
+  template = "${file("./scripts/join-cluster.tpl")}"
 
   vars = {
     jenkins_url            = "http://${google_compute_forwarding_rule.jenkins_master_forwarding_rule.ip_address}:8080"

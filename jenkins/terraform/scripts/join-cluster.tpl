@@ -23,4 +23,4 @@ Mode.NORMAL,
 new SSHLauncher("'$INSTANCE_IP'", 22, "'$JENKINS_CREDENTIALS_ID'"),
 RetentionStrategy.INSTANCE)
 Jenkins.instance.addNode(dumb)
-' $JENKINS_URL/script
+' $JENKINS_URL/script 
