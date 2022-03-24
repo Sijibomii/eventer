@@ -1,65 +1,37 @@
 {
     "variables" : {
-        "service_account" : "../../eventer-jenkins-cluster-f8bd7a6e0d54.json",
-        "project": "eventer-jenkins-cluster",
-        "zone": "us-central1-a",
-        "ssh_key" : "./ssh"
+        "region" : "us-east-1",
+        "aws_access_key": "AKIA2ETGCOPAF6D4GNKZ",
+	    "aws_secret_key": "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",
+        "source_ami" : "ami-003271095a1a2fd11",
+        "instance_type": "t2.micro",
+        "ssh_key": "./ssh"
     },
     "builders" : [
         {
-            "type": "googlecompute",
-            "image_name" : "jenkins-master-v22041",
-            "account_file": "{{user `service_account`}}",
-            "project_id": "{{user `project`}}",
-            "source_image": "centos-stream-8-v20220317",
-            "ssh_username": "packer",
-            "zone": "{{user `zone`}}"
+            "type" : "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+		    "secret_key": "{{user `aws_secret_key`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "jenkins-master-2.204.1",
+            "ami_description" : "Amazon Linux Image with Jenkins Server",
+            "run_tags" : {
+                "Name" : "packer-builder"
+            }
         }
     ],
     "provisioners" : [
         {
             "type" : "file",
-            "source" : "./scripts/basic-security.groovy",
+            "source" : "./scripts",
             "destination" : "/tmp/"
         },
         {
             "type" : "file",
-            "source" : "./scripts/csrf-protection.groovy",
-            "destination" : "/tmp/"
-        },
-        {
-            "type" : "file",
-            "source" : "./scripts/disable-cli.groovy",
-            "destination" : "/tmp/"
-        },
-        {
-            "type" : "file",
-            "source" : "./scripts/disable-jnlp.groovy",
-            "destination" : "/tmp/"
-        },
-        {
-            "type" : "file",
-            "source" : "./scripts/node-agent.groovy",
-            "destination" : "/tmp/"
-        },
-        {
-            "type" : "file",
-            "source" : "./scripts/skip-jenkins-setup.groovy",
-            "destination" : "/tmp/"
-        },
-        {
-            "type" : "file",
-            "source" : "./config/install-plugins.sh",
-            "destination" : "/tmp/"
-        },
-        {
-            "type" : "file",
-            "source" : "./config/jenkins",
-            "destination" : "/tmp/"
-        },
-        {
-            "type" : "file",
-            "source" : "./config/plugins.txt",
+            "source" : "./config",
             "destination" : "/tmp/"
         },
         {

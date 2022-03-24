@@ -21,7 +21,7 @@ installPlugin() {
   fi
 }
 
-while read -r plugin 
+while read -r plugin
 do
     installPlugin "$plugin"
 done < "/tmp/config/plugins.txt"

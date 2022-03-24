@@ -1,19 +1,26 @@
 {
     "variables" : {
-        "service_account" : "../../eventer-jenkins-cluster-f8bd7a6e0d54.json",
-        "project": "eventer-jenkins-cluster",
-        "zone": "us-central1-a"
+        "region" : "us-east-1",
+        "instance_type": "t2.micro",
+        "source_ami" : "ami-003271095a1a2fd11",
+        "aws_access_key": "AKIA2ETGCOPAF6D4GNKZ",
+	    "aws_secret_key": "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"
     },
     "builders" : [
         {
-            "type": "googlecompute",
-            "image_name" : "jenkins-worker",
-            "account_file": "{{user `service_account`}}",
-            "project_id": "{{user `project`}}",
-            "source_image": "centos-stream-8-v20220317",
-            "ssh_username": "packer",
-            "zone": "{{user `zone`}}"
-          }
+            "type" : "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+		    "secret_key": "{{user `aws_secret_key`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "jenkins-worker1",
+            "ami_description" : "Jenkins worker's AMI",
+            "run_tags" : {
+                "Name" : "packer-builder"
+            }
+        }
     ],
     "provisioners" : [
         {

@@ -24,6 +24,8 @@ search/.flowconfig
 search/search_env
 
 
+jenkins/packer
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -55,8 +57,3 @@ terraform/*_override.tf.json
 # example: *tfplan*
 
 
-jenkins/eventer-jenkins-cluster-f8bd7a6e0d54.json
-jenkins/packer/master/ssh
-jenkins/packer/master/ssh.pub
-
-jenkins/packer/master/gce_googlecompute.pem

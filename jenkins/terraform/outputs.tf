@@ -1,7 +1,11 @@
 output "bastion" {
-    value = "${google_compute_instance.bastion.network_interface.0.access_config.0.nat_ip }"
+  value = aws_instance.bastion.public_ip
 }
 
-output "jenkins" {
-    value = google_compute_forwarding_rule.jenkins_master_forwarding_rule.ip_address
+output "jenkins-master-elb" {
+  value = aws_elb.jenkins_elb.dns_name
 }
+
+# output "jenkins-dns" {
+#   value = "https://${aws_route53_record.jenkins_master.name}"
+# }
