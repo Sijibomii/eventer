@@ -45,7 +45,7 @@ jobs:
       - name: trigger jenkins build Job
         uses: appleboy/jenkins-action@master
         with:
-          url: "tf-lb-20220325120129809100000001-2104115208.us-east-1.elb.amazonaws.com"
+          url: "http://tf-lb-20220325120129809100000001-2104115208.us-east-1.elb.amazonaws.com"
           user: "username"
           token: ${{ secrets.JENKINS_TOKEN}}
           job: "eventer-gateway-dev"
