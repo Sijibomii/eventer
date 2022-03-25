@@ -19,13 +19,16 @@ jobs:
         working-directory: ./gateway
     steps:
       - uses: actions/checkout@v2
-      - uses: cd gateway && npm install && npm run test:ci
-      - run:  cd gateway && docker build -t sijibomi242/eventer-gateway-dev .
+      - uses: cd gateway && npm install
+      - run:  cd gateway && docker build -f Dockerfile \
+            -t sijibomi242/eventer-gateway-dev:latest \
+            -t sijibomi242/eventer-gateway-dev:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} \
+            .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push sijibomi242/eventer-gateway-dev
+      - run: docker push sijibomi242/eventer-gateway-dev --all-tags
       - name: Create Pull Request
         id: sxxidhuhfiehijij
         uses: peter-evans/create-pull-request@v3
@@ -43,3 +46,10 @@ jobs:
           assignees: sijibomii
           reviewers: sijibomii
           base: pre-prod
+      - name: trigger jenkins build Job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: "tf-lb-20220325120129809100000001-2104115208.us-east-1.elb.amazonaws.com"
+          user: "jenkins"
+          token: ${{ secrets.JENKINS_TOKEN}}
+          job: "eventer-gateway-dev"

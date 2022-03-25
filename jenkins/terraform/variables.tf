@@ -105,4 +105,4 @@ variable "jenkins_worker_instance_type" {
   type = string
   description = "Jenkins worker EC2 instance type"
   default = "t2.medium"
-}
+} 

@@ -14,7 +14,7 @@ import hudson.model.Node.Mode
 import hudson.slaves.*
 import jenkins.model.Jenkins
 import hudson.plugins.sshslaves.SSHLauncher
-
+ 
 DumbSlave dumb = new DumbSlave("'$INSTANCE_NAME'",
 "'$INSTANCE_NAME'",
 "/home/ec2-user",

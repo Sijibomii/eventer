@@ -55,7 +55,7 @@ resource "aws_launch_configuration" "jenkins_workers_launch_conf" {
   key_name        = aws_key_pair.management.id
   security_groups = [aws_security_group.jenkins_workers_sg.id]
   user_data       = data.template_file.user_data_jenkins_worker.rendered
-
+  //depends_on = [aws_instance.jenkins_master]
   root_block_device {
     volume_type           = "gp2"
     volume_size           = 30
@@ -67,6 +67,12 @@ resource "aws_launch_configuration" "jenkins_workers_launch_conf" {
   }
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [aws_instance.jenkins_master]
+
+  create_duration = "100s"
+}
+
 // ASG Jenkins workers
 resource "aws_autoscaling_group" "jenkins_workers" {
   name                 = "jenkins_workers_asg"
@@ -74,9 +80,9 @@ resource "aws_autoscaling_group" "jenkins_workers" {
   vpc_zone_identifier  = [for subnet in aws_subnet.private_subnets : subnet.id]
   min_size             = 2
   max_size             = 10
-
-  depends_on = [aws_instance.jenkins_master, aws_elb.jenkins_elb]
-
+  //delay the autoscalling group by 30seconds
+  //depends_on = [aws_instance.jenkins_master, aws_elb.jenkins_elb]
+  depends_on = [time_sleep.wait_30_seconds]
   lifecycle {
     create_before_destroy = true
   }

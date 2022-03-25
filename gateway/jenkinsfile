@@ -1,0 +1,15 @@
+node(){
+  //3.92.87.5 bastion
+  //pull the dev image from docker
+  step('login into docker'){
+    checkout scm
+  }
+  step('pull docker image'){
+
+  }
+  //test the code from inside docker
+  // run vunrability assessment
+  //if test succeeds build pre-prod image
+  //if test fails notify on slack
+  
+}
