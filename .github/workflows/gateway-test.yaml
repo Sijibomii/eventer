@@ -19,7 +19,7 @@ jobs:
         working-directory: ./gateway
     steps:
       - uses: actions/checkout@v2
-      - uses: cd gateway && npm install
+      - run: cd gateway && npm install
       - run:  cd gateway && docker build -f Dockerfile \
             -t sijibomi242/eventer-gateway-dev:latest \
             -t sijibomi242/eventer-gateway-dev:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} \
