@@ -46,6 +46,6 @@ jobs:
         uses: appleboy/jenkins-action@master
         with:
           url: "tf-lb-20220325120129809100000001-2104115208.us-east-1.elb.amazonaws.com"
-          user: "jenkins"
+          user: "username"
           token: ${{ secrets.JENKINS_TOKEN}}
           job: "eventer-gateway-dev"
