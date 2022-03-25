@@ -19,7 +19,6 @@ jobs:
         working-directory: ./users
     steps:
       - uses: actions/checkout@v2
-      - uses: cd users && npm install && npm run test:ci
       - run:  cd users && docker build -t sijibomi242/eventer-users-dev .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
