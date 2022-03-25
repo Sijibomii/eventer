@@ -11,5 +11,5 @@ node(){
   // run vunrability assessment
   //if test succeeds build pre-prod image
   //if test fails notify on slack
-  
+  //create pull request if succeedded
 }
