@@ -19,7 +19,7 @@ jobs:
         working-directory: ./gateway
     steps:
       - uses: actions/checkout@v2
-      - run:  cd gateway && docker build -f Dockerfile \
+      - run:  docker build -f Dockerfile \
             -t sijibomi242/eventer-gateway-dev:latest \
             -t sijibomi242/eventer-gateway-dev:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} \
             .
