@@ -42,10 +42,8 @@ node() {
       success {
         scmInfo = checkout scm
         sh 'git checkout pre-prod'
-        sh 'sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo'
-        sh 'sudo dnf install gh'
         sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t ${scmInfo.GIT_COMMIT}"
-      }
+      } 
    }
   // post {
   //   failure {

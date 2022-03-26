@@ -4,6 +4,7 @@ echo "Installing Amazon Linux extras"
 amazon-linux-extras install epel -y
 
 echo "Install Jenkins stable release"
+yum clean all
 yum remove -y java
 yum install -y java-1.8.0-openjdk
 wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
@@ -13,6 +14,16 @@ chkconfig jenkins on
 
 echo "Install git"
 yum install -y git
+
+echo "install github cli"
+yum install dnf
+dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+dnf install gh
+
+# echo "install docker"
+# yum update -y
+# curl -fsSL https://get.docker.com | sh;
+# service docker start
 
 echo "Setup SSH key"
 mkdir /var/lib/jenkins/.ssh
@@ -169,5 +180,5 @@ echo "fixing permissions"
 chown ${file_owner} ${plugin_dir} -R
 
 echo "all done"
-
+systemctl start docker
 service jenkins start
