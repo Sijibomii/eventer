@@ -1,6 +1,6 @@
 node() {
   environment {
-		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+		DOCKERHUB_CREDENTIALS= 'docker-hub'
 	}
   stage('checkout') {
     checkout scm
