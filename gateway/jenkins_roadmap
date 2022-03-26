@@ -6,3 +6,6 @@
   //if test succeeds build pre-prod image
   //if test fails notify on slack/send email
   //create pull request if succeedded
+
+  sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+  sh 'docker pull sijibomi242/eventer-gateway-dev:latest'

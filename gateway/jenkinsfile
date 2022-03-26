@@ -6,19 +6,10 @@ node() {
     checkout scm
   }
 
-  stage('install docker') {
-    sh 'sudo yum install -y yum-utils device-mapper-persistent-data lvm2'
-    sh 'sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo'
-    sh 'sudo yum install docker'
-    sh 'systemctl start docker'
-    sh 'systemctl enable docker'
-  }
-
-  stage('docker-login') {
-    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-  }
   stage('docker-pull') {
-    sh 'docker pull sijibomi242/eventer-gateway-dev:latest'
+    docker.withRegistry( '', DOCKERHUB_CREDENTIALS ) {
+      dockerImage.pull('sijibomi242/eventer-gateway-dev:latest')
+    }
   }
   parallel(
             'Quality Tests': {
