@@ -1,14 +1,18 @@
 node() {
 
+  environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+	}
+
   stage('checkout') {
     checkout scm
   }
 
   stage('docker-login') {
-     withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: '-u', passwordVariable: '-p')]) {
-       sh 'docker login hub.docker.com'
-    }
-    
+    //  withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: '-u', passwordVariable: '-p')]) {
+    //    sh 'docker login '
+    // }
+    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
   }
   stage('docker-pull') {
     sh 'docker pull sijibomi242/eventer-gateway-dev:latest'
