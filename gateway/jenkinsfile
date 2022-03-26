@@ -8,7 +8,7 @@ node() {
 
   stage('docker-pull') {
     docker.withRegistry( '', DOCKERHUB_CREDENTIALS ) {
-      dockerImage.pull('sijibomi242/eventer-gateway-dev:latest')
+      docker.pull('sijibomi242/eventer-gateway-dev:latest')
     }
   }
   parallel(
