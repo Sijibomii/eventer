@@ -6,6 +6,13 @@ node() {
     checkout scm
   }
 
+  stage('install docker') {
+    sh 'yum install -y yum-utils device-mapper-persistent-data lvm2'
+    sh 'yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo'
+    sh 'yum install docker'
+    sh 'systemctl start docker'
+    sh 'systemctl enable docker'
+  }
 
   stage('docker-login') {
     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
