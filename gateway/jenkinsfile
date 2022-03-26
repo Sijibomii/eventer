@@ -5,8 +5,9 @@ node() {
   }
 
   stage('docker-login') {
-    withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: '-u', passwordVariable: 'password')]) {
-      sh 'docker login -u sijibomi242 -p $password '
+    withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: 'username', passwordVariable: 'password')]) {
+      sudo chmod 666 /var/run/docker.sock
+      sh 'docker login -u $username -p $password '
     }
     //sh 'docker login -u sijibomi242 -p testpassword https://hub.docker.com/'
    // sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
