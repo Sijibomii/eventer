@@ -7,10 +7,10 @@ node() {
   }
 
   stage('docker-login') {
-    //  withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: '-u', passwordVariable: '-p')]) {
-    //    sh 'docker login '
-    // }
-    sh 'docker login -u sijibomi242 -p testpassword https://hub.docker.com/'
+     withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: '-u', passwordVariable: '-p')]) {
+      sh 'echo $-p | docker login -u sijibomi242 --password-stdin'
+    }
+    //sh 'docker login -u sijibomi242 -p testpassword https://hub.docker.com/'
    // sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
   }
   stage('docker-pull') {
