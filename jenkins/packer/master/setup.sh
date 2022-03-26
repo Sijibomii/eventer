@@ -16,14 +16,16 @@ echo "Install git"
 yum install -y git
 
 echo "install github cli"
-yum install dnf
-dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
-dnf install gh
+curl https://raw.githubusercontent.com/dvershinin/apt-get-centos/master/apt-get.sh -o /usr/local/bin/apt-get
+chmod 0755 /usr/local/bin/apt-get
+apt update
+apt install gh
 
-# echo "install docker"
-# yum update -y
-# curl -fsSL https://get.docker.com | sh;
-# service docker start
+echo "Install Docker engine"
+yum update -y
+yum install docker -y
+usermod -aG docker ec2-user
+systemctl enable docker
 
 echo "Setup SSH key"
 mkdir /var/lib/jenkins/.ssh
