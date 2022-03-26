@@ -7,8 +7,8 @@ node() {
   }
 
   stage('docker-pull') {
-    docker.withRegistry( '', DOCKERHUB_CREDENTIALS ) {
-      docker.pull('sijibomi242/eventer-gateway-dev:latest')
+    docker.withRegistry('', DOCKERHUB_CREDENTIALS ) {
+      
     }
   }
   
