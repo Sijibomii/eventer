@@ -6,7 +6,7 @@ node() {
 
   stage('docker-login') {
      withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: '-u', passwordVariable: '-p')]) {
-       sh 'docker login'
+       sh 'docker login hub.docker.com'
     }
     
   }
