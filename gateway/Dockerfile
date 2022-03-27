@@ -5,6 +5,8 @@ COPY package.json package-lock.json ./
 
 RUN npm i
 
+RUN mkdir -p /usr/src/app/.nyc_output && chmod -R 777 /usr/src/app/.nyc_output
+
 COPY . .
 
 RUN npm run build
