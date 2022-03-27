@@ -42,7 +42,7 @@ node() {
      withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
         sh 'git checkout pre-prod'
         sh 'git pull origin dev'
-        sh 'git merge dev'
+        //sh 'git merge dev'
         sh 'git push origin pre-prod'
     }   
   }
