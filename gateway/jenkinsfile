@@ -6,7 +6,7 @@ node() {
 
   stage('docker-login') {
     withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: 'username', passwordVariable: 'password')]) {
-      sh 'sudo chmod +s chmod 666 /var/run/docker.sock'
+      // sh 'sudo chmod +s chmod 666 /var/run/docker.sock'
       sh 'docker login -u $username -p $password '
     }
     //sh 'docker login -u sijibomi242 -p testpassword https://hub.docker.com/'
