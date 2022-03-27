@@ -1,9 +1,11 @@
 node() {
 
-   //RELEASE_NOTES = sh (script: """git log --format="medium" -1 ${GIT_COMMIT}""", returnStdout:true)
-  stage('checkout') {
-    checkout scm
-  }
+   try{
+
+     stage('checkout') {
+      checkout scm
+      notifySlack('STARTED') 
+      }
 
   stage('docker-login') {
     withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: 'username', passwordVariable: 'password')]) {
@@ -46,7 +48,15 @@ node() {
         //sh 'git merge dev'
         sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.git'
         sh 'git push origin pre-prod'
+        //notifySlack('FINISHED BUILD') 
     }   
   }
+
+   }catch(e){
+      currentBuild.result = 'FAILED' 
+      throw e
+    } finally {
+       notifySlack(currentBuild.result) 
+    }
   
 }

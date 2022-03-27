@@ -1,0 +1,15 @@
+unit tests -> tests each microservice functionality alone
+component testing -> test each microservice with its datastores as a component
+integration testing -> tests the communication between different microservices
+end to end testing -> here the system is treated as a black box with request as input and response 
+as output
+performance testing(chaos engineering)
+https://www.simform.com/blog/microservice-testing-strategies/
+
+
+ansible playbook to deploy to evironments
+
+ELK logging and monitoring
+Prometheus for alerting
+Tracing
+Circuit breaking
