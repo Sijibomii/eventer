@@ -39,7 +39,7 @@ node() {
 
   stage ('git pull request'){
         sh 'git checkout pre-prod'
-        sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t ${scmInfo.GIT_COMMIT}"
+        sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t new commit"
   }
   // post {
   //     // success {
