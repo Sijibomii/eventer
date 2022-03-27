@@ -43,7 +43,7 @@ node() {
         sh 'git checkout pre-prod'
         sh 'git pull origin dev'
         //sh 'git merge dev'
-        sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.gi'
+        sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.git'
         sh 'git push origin pre-prod'
     }   
   }
