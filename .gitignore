@@ -30,6 +30,7 @@ jenkins/terraform/credentials
 jenkins/packer/master/ssh
 jenkins/packer/master/ssh.pub
 jenkins/packer/master/template.json
+
 jenkins/packer/worker/template.json
 # Local .terraform directories
 **/.terraform/*
