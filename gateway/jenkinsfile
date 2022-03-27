@@ -38,30 +38,13 @@ node() {
   }
 
   stage ('git push pre-prod'){
+        sh 'echo ${env.JOB_NAME} ${env.BUILD_NUMBER} > builds.txt'
         sh 'git add -A'
+        sh 'git checkout -b pre-prod'
         sh "git commit -m '${env.JOB_NAME} ${env.BUILD_NUMBER}'"
         sh "git remote add origin https://github.com/Sijibomii/eventer.git"
         sh "git push -u origin pre-prod"
-        // sh 'dnf install gh'
-        // sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t new commit"
-  
+        
   }
-  // post {
-  //     // success {
-  //     // slackSend "Build deployed successfully - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-  //     // }
-  //     success {
-  //       scmInfo = checkout scm
-  //       sh 'yum localinstall gh_*_linux_amd64.rpm'
-  //       sh 'git checkout pre-prod'
-  //       sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t ${scmInfo.GIT_COMMIT}"
-  //     } 
-  //  }
-  // // post {
-  // //   failure {
-  // //       slackSend failOnError:true message:"Build failed  - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-  // //   }
-  // // }
-
   
 }
