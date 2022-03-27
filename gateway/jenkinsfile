@@ -42,6 +42,7 @@ node() {
      withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
         sh 'git checkout pre-prod'
         sh 'git pull origin dev'
+        sh 'git pull'
         //sh 'git merge dev'
         sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.git'
         sh 'git push origin pre-prod'
