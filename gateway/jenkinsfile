@@ -35,7 +35,7 @@ node() {
             // }
         )
   stage('pre-pod image') {
-    sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f Dockerfile.prod ./gateway "
+    sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gatewayDockerfile.prod . "
   }
   post {
       // success {
