@@ -1,22 +1,22 @@
-name: events:tests
+name: search:tests
 on:
   push:
     branches:
       - dev
     paths:
-      - 'events/**'
+      - 'search/**'
   pull_request:
     branches:
       - dev
     paths:
-      - 'events/**'
+      - 'search/**'
 jobs:
   test:
-    name: test-events
+    name: test-search
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./events
+        working-directory: ./search
     env:
       DJANGO_SECRET_KEY: test-key-not-good-maybe-make-one-better
     strategy:
@@ -35,9 +35,26 @@ jobs:
       - name: Run Tests
         run: |
           python manage.py test
-      - run: docker build -t sijibomi242/eventer-events-dev .
+      - run: docker build -t sijibomi242/eventer-search-dev .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push sijibomi242/eventer-events-dev
+      - run: docker push sijibomi242/eventer-search-dev
+      - name: Create Pull Request
+        id: sxxidhuhfiehijij
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+          commit-message: ${{ github.event.head_commit.message }}
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: dev
+          delete-branch: false
+          title: ${{ github.event.head_commit.message }}
+          labels: |
+            report
+            automated pr
+          assignees: sijibomii
+          reviewers: sijibomii
+          base: pre-prod

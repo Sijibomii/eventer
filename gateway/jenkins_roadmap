@@ -1,0 +1,49 @@
+
+  //3.92.87.5 bastion
+  //pull the dev image from docker
+  //test the code from inside docker
+  // run vunrability assessment
+  //if test succeeds build pre-prod image
+  //if test fails notify on slack/send email
+  //create pull request if succeedded
+
+  sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+  sh 'docker pull sijibomi242/eventer-gateway-dev:latest'
+
+  parallel(
+            'Quality Tests': {
+                sh "docker run --rm sijibomi242/eventer-gateway-dev npm run lint"
+            },
+            'Integration Tests': {
+                sh "docker run --rm sijibomi242/eventer-gateway-dev npm run test:ci"
+            },
+            'Coverage Reports': {
+                sh "docker run --rm -v $PWD/coverage:/app/coverage sijibomi242/eventer-gateway-dev npm run coverage-html"
+                publishHTML (target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: "$PWD/coverage",
+                    reportFiles: "index.html",
+                    reportName: "Coverage Report"
+                ])
+            }
+        )
+  stage('pre-pod image') {
+    sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f Dockerfile.prod "
+  }
+  post {
+      // success {
+      // slackSend "Build deployed successfully - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+      // }
+      success {
+        scmInfo = checkout scm
+        sh 'git checkout pre-prod'
+        sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t ${scmInfo.GIT_COMMIT}"
+      } 
+   }
+  // post {
+  //   failure {
+  //       slackSend failOnError:true message:"Build failed  - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+  //   }
+  // }

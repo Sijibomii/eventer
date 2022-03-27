@@ -13,8 +13,8 @@ store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.Sys
 
 slavesPrivateKey = new BasicSSHUserPrivateKey(
 CredentialsScope.GLOBAL,
-"jenkins-slaves",
-"USERNAME",
+"jenkins-slaves", 
+"ec2-user",
 new BasicSSHUserPrivateKey.UsersPrivateKeySource(),
 "",
 ""

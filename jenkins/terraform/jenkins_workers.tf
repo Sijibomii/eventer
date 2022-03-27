@@ -1,85 +1,101 @@
-resource "google_compute_firewall" "allow_ssh_to_worker" {
-  project = var.project
-  name    = "allow-ssh-to-worker"
-  network = google_compute_network.management.self_link
+// Jenkins worker AMI
+data "aws_ami" "jenkins-worker" {
+  most_recent = true
+  owners      = ["self"]
 
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
+  filter {
+    name   = "name"
+    values = ["jenkins-worker*"]
   }
-
-  source_tags = ["bastion", "jenkins-ssh", "jenkins-worker"]
 }
 
-// Jenkins workers startup script
-data "template_file" "jenkins_worker_startup_script" {
-  template = "${file("scripts/join-cluster.tpl")}"
+// Jenkins workers user data
+data "template_file" "user_data_jenkins_worker" {
+  template = file("scripts/join-cluster.tpl")
 
   vars = {
-    jenkins_url            = "http://${google_compute_forwarding_rule.jenkins_master_forwarding_rule.ip_address}:8080"
+    jenkins_url            = "http://${aws_instance.jenkins_master.private_ip}:8080"
     jenkins_username       = var.jenkins_username
     jenkins_password       = var.jenkins_password
     jenkins_credentials_id = var.jenkins_credentials_id
   }
 }
 
-resource "google_compute_instance_template" "jenkins-worker-template" {
-  name_prefix = "jenkins-worker"
-  description = "Jenkins workers instances template"
-  region       = var.region
+// Jenkinw workers security group
+resource "aws_security_group" "jenkins_workers_sg" {
+  name        = "jenkins_workers_sg"
+  description = "Allow traffic on port 22 from Jenkins master SG"
+  vpc_id      = aws_vpc.management.id
 
-  tags = ["jenkins-worker"]
-  machine_type         = var.jenkins_worker_machine_type
-  metadata_startup_script = data.template_file.jenkins_worker_startup_script.rendered
-
-  disk {
-    source_image = var.jenkins_worker_machine_image
-    disk_size_gb = 50
+  ingress {
+    from_port       = "22"
+    to_port         = "22"
+    protocol        = "tcp"
+    security_groups = [aws_security_group.jenkins_master_sg.id, aws_security_group.bastion_host.id]
   }
 
-  network_interface {
-    network = google_compute_network.management.self_link 
-    subnetwork = google_compute_subnetwork.private_subnets[0].self_link 
+  egress {
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-  metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.ssh_public_key)}"
+  tags = {
+    Name   = "jenkins_workers_sg"
+    Author = var.author
   }
 }
 
-resource "google_compute_instance_group_manager" "jenkins-workers-group" {
-  provider = google-beta
-  name = "jenkins-workers"
-  base_instance_name = "jenkins-worker"
-  zone               = var.zone
-
-  depends_on = [google_compute_instance.jenkins_master]
-
-  version {
-    instance_template  = google_compute_instance_template.jenkins-worker-template.self_link
+// Jenkins workers launch configuration
+resource "aws_launch_configuration" "jenkins_workers_launch_conf" {
+  name            = "jenkins_workers_config"
+  image_id        = data.aws_ami.jenkins-worker.id
+  instance_type   = var.jenkins_worker_instance_type
+  key_name        = aws_key_pair.management.id
+  security_groups = [aws_security_group.jenkins_workers_sg.id]
+  user_data       = data.template_file.user_data_jenkins_worker.rendered
+  //depends_on = [aws_instance.jenkins_master]
+  root_block_device {
+    volume_type           = "gp2"
+    volume_size           = 30
+    delete_on_termination = false
   }
 
-  target_pools = [google_compute_target_pool.jenkins-workers-pool.id]
-  target_size = 2
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
-resource "google_compute_target_pool" "jenkins-workers-pool" {
-  provider = google-beta
-  name = "jenkins-workers-pool"
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [aws_instance.jenkins_master]
+
+  create_duration = "100s"
 }
 
-resource "google_compute_autoscaler" "jenkins-workers-autoscaler" {
-  name   = "jenkins-workers-autoscaler"
-  zone   = var.zone
-  target = google_compute_instance_group_manager.jenkins-workers-group.id
+// ASG Jenkins workers
+resource "aws_autoscaling_group" "jenkins_workers" {
+  name                 = "jenkins_workers_asg"
+  launch_configuration = aws_launch_configuration.jenkins_workers_launch_conf.name
+  vpc_zone_identifier  = [for subnet in aws_subnet.private_subnets : subnet.id]
+  min_size             = 2
+  max_size             = 10
+  //delay the autoscalling group by 30seconds
+  //depends_on = [aws_instance.jenkins_master, aws_elb.jenkins_elb]
+  depends_on = [time_sleep.wait_30_seconds]
+  lifecycle {
+    create_before_destroy = true
+  }
 
-  autoscaling_policy {
-    max_replicas    = 6
-    min_replicas    = 2
-    cooldown_period = 60
+  tag {
+    key                 = "Name"
+    value               = "jenkins_worker"
+    propagate_at_launch = true
+  }
 
-    cpu_utilization {
-      target = 0.8
-    }
+  tag {
+    key                 = "Author"
+    value               = var.author
+    propagate_at_launch = true
   }
 }

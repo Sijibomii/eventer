@@ -1,33 +1,45 @@
-// Provider at runtime
-variable "credentials_path" {
-    type = string
-    description = "Service account json file"
-}
-
-variable "project" {
-    type = string
-    description = "The project ID to deploy to"
-}
+// Provided at runtime
 
 variable "region" {
-    type = string
-    description = "GCP region"
+  type = string
+  description = "AWS region"
 }
 
-variable "zone" {
-    type = string
-    description = "The primary zone where the bastion host will live"
+variable "shared_credentials_file" {
+  type = string
+  description = "AWS credentials file path"
 }
 
-variable "ssh_user" {
-    type = string
-    description = "SSH username"
+variable "aws_profile" {
+  type = string
+  description = "AWS profile"
 }
 
-variable "ssh_public_key" {
-    type = string
-    description = "SSH public key file path"
+variable "author" {
+  type = string
+  description = "Created by"
 }
+
+
+variable "public_key" {
+  type = string
+  description = "SSH public key path"
+}
+
+# variable "hosted_zone_id" {
+#   type = string
+#   description = "Route53 hosted zone id"
+# }
+
+# variable "domain_name" {
+#   type = string
+#   description = "Domain name"
+# }
+
+# variable "ssl_arn" {
+#   type = string
+#   description = "ACM SSL ARN"
+# }
 
 variable "jenkins_username" {
   type = string
@@ -46,10 +58,23 @@ variable "jenkins_credentials_id" {
 
 // Default values
 
-variable "network_name" {
+variable "vpc_name" {
   type = string
-  description = "Network name"
+  description = "VPC name"
   default     = "management"
+}
+
+variable "availability_zones" {
+  type        = list
+  description = "List of Availability Zones"
+  default     = ["us-east-1a", "us-east-1b"]
+}
+
+
+variable "cidr_block" {
+  type = string
+  description = "VPC CIDR block"
+  default     = "10.0.0.0/16"
 }
 
 variable "public_subnets_count" {
@@ -64,39 +89,20 @@ variable "private_subnets_count" {
   default = 2
 }
 
-variable "bastion_machine_type" {
-    type = string
-    description = "Instance type for the Bastion host"
-    default = "f1-micro"
+variable "bastion_instance_type" {
+  type = string
+  description = "Bastion instance type"
+  default = "t2.micro"
 }
 
-variable "bastion_machine_image" {
-    type = string
-    description = "Machine image for bastion host"
-    default = "centos-8-v20200316"
+variable "jenkins_master_instance_type" {
+  type = string
+  description = "Jenkins master EC2 instance type"
+  default = "t2.large"
 }
 
-variable "jenkins_master_machine_type" {
-    type = string
-    description = "Instance type for the Jenkins host"
-    default = "n1-standard-1"
-}
-
-variable "jenkins_master_machine_image" {
-    type = string
-    description = "Machine image for jenkins host"
-    default = "jenkins-master-v22041"
-}
-
-variable "jenkins_worker_machine_type" {
-    type = string
-    description = "Instance type for the worker host"
-    default = "n1-standard-1"
-}
-
-variable "jenkins_worker_machine_image" {
-    type = string
-    description = "Machine image for worker host"
-    default = "jenkins-worker"
-}
-
+variable "jenkins_worker_instance_type" {
+  type = string
+  description = "Jenkins worker EC2 instance type"
+  default = "t2.medium"
+} 

@@ -1,84 +1,119 @@
-resource "google_compute_firewall" "allow_ssh_to_jenkins" {
-  project = var.project
-  name    = "allow-ssh-to-jenkins"
-  network = google_compute_network.management.self_link
+data "aws_ami" "jenkins-master" {
+  most_recent = true
+  owners      = ["self"]
 
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
-  source_tags = ["bastion", "jenkins-ssh"]
-}
-
-resource "google_compute_firewall" "allow_access_to_ui" {
-  project = var.project
-  name    = "allow-access-to-jenkins-web"
-  network = google_compute_network.management.self_link
-
-  allow {
-    protocol = "tcp"
-    ports    = ["8080"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-
-  source_tags = ["jenkins-web"]
-}
-
-resource "google_compute_instance" "jenkins_master" {
-  project      = var.project
-  name         = "jenkins-master"
-  machine_type = var.jenkins_master_machine_type
-  zone         = var.zone
-
-  tags = ["jenkins-ssh", "jenkins-web"]
-
-  depends_on = [google_compute_instance.bastion]
-
-  boot_disk {
-    initialize_params {
-      image = var.jenkins_master_machine_image
-    }
-  }
-
-  network_interface {
-    subnetwork = google_compute_subnetwork.private_subnets[0].self_link 
-  }
-
-  metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.ssh_public_key)}"
+  filter {
+    name   = "name"
+    values = ["jenkins-master-*"]
   }
 }
 
+  
+resource "aws_security_group" "jenkins_master_sg" {
+  name        = "jenkins_master_sg"
+  description = "Allow traffic on port 8080 and enable SSH"
+  vpc_id      = aws_vpc.management.id
 
-resource "google_compute_target_pool" "jenkins-master-target-pool" {
-    name             = "jenkins-master-target-pool"
-    session_affinity = "NONE"
-    region           = var.region
+  ingress {
+    from_port       = "22"
+    to_port         = "22"
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion_host.id]
+  }
 
-    instances = [
-        google_compute_instance.jenkins_master.self_link
-    ]
+  ingress {
+    from_port       = "8080"
+    to_port         = "8080"
+    protocol        = "tcp"
+    security_groups = [aws_security_group.elb_jenkins_sg.id]
+    cidr_blocks = [var.cidr_block]
+  }
 
-    health_checks = [
-        google_compute_http_health_check.jenkins_master_health_check.name
-    ]
+  egress {
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name   = "jenkins_master_sg"
+    Author = var.author
+  }
 }
 
-resource "google_compute_http_health_check" "jenkins_master_health_check" {
-  name         = "jenkins-master-health-check"
-  request_path = "/"
-  port = "8080"
-  timeout_sec        = 4
-  check_interval_sec = 5
+resource "aws_instance" "jenkins_master" {
+  ami                    = data.aws_ami.jenkins-master.id
+  instance_type          = var.jenkins_master_instance_type
+  key_name               = aws_key_pair.management.id
+  vpc_security_group_ids = [aws_security_group.jenkins_master_sg.id]
+  subnet_id              = element(aws_subnet.private_subnets, 0).id
+
+  root_block_device {
+    volume_type           = "gp3"
+    volume_size           = 30
+    delete_on_termination = false
+  }
+
+  tags = {
+    Name   = "jenkins_master"
+    Author = var.author
+  }
 }
 
-resource "google_compute_forwarding_rule" "jenkins_master_forwarding_rule" {
-  name   = "jenkins-master-forwarding-rule"
-  region = var.region
-  load_balancing_scheme = "EXTERNAL"
-  target                = google_compute_target_pool.jenkins-master-target-pool.self_link
-  port_range            = "8080"
-  ip_protocol           = "TCP"
+// Jenkins ELB Security group
+resource "aws_security_group" "elb_jenkins_sg" {
+  name        = "elb_jenkins_sg"
+  description = "Allow http traffic"
+  vpc_id      = aws_vpc.management.id
+  
+  ingress {
+    from_port   = "80"
+    to_port     = "80"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name   = "elb_jenkins_sg"
+    Author = var.author
+  }
+}
+
+// Jenkins ELB
+resource "aws_elb" "jenkins_elb" {
+  subnets                   = [for subnet in aws_subnet.public_subnets : subnet.id]
+  cross_zone_load_balancing = true
+  security_groups           = [aws_security_group.elb_jenkins_sg.id]
+  instances                 = [aws_instance.jenkins_master.id]
+
+
+
+  listener {
+    instance_port      = 8080
+    instance_protocol  = "http"
+    lb_port            = 80
+    lb_protocol        = "http"
+
+  }
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    target              = "TCP:8080"
+    interval            = 5
+  }
+
+  tags = {
+    Name   = "jenkins_elb"
+    Author = var.author
+  }
 }

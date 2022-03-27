@@ -19,10 +19,16 @@ jobs:
         working-directory: ./gateway
     steps:
       - uses: actions/checkout@v2
-      - uses: cd gateway && npm install && npm run test:ci
-      - run:  cd gateway && docker build -t sijibomi242/eventer-gateway-dev .
+      - run: docker build -t sijibomi242/eventer-gateway-dev:latest -t sijibomi242/eventer-gateway-dev:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push sijibomi242/eventer-gateway-dev
+      - run: docker push sijibomi242/eventer-gateway-dev --all-tags
+      - name: trigger jenkins build Job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: "http://tf-lb-20220327031958157700000001-2070252476.us-east-1.elb.amazonaws.com"
+          user: "jenkins"
+          token: ${{ secrets.JENKINS_TOKEN}}
+          job: "eventer-gateway-dev"

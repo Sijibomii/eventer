@@ -23,7 +23,14 @@ search/scripts/flow/*/.flowconfig
 search/.flowconfig
 search/search_env
 
-
+<<<<<<< HEAD
+jenkins/terraform/credentials
+=======
+>>>>>>> 6d3228c95b303c9f01cf49bddb22c7cc025802b8
+jenkins/packer/master/ssh
+jenkins/packer/master/ssh.pub
+jenkins/packer/master/template.json
+jenkins/packer/worker/template.json
 # Local .terraform directories
 **/.terraform/*
 
@@ -55,4 +62,3 @@ terraform/*_override.tf.json
 # example: *tfplan*
 
 
-jenkins/sijibomi-eventer-243-dd429f9dd3a1.json

@@ -1,11 +1,5 @@
-provider "google" {
-  credentials = file(var.credentials_path)
-  project     = var.project
-  region      = var.region
-}
-
-provider "google-beta" {
-  credentials = file(var.credentials_path)
-  project     = var.project
-  region      = var.region
+provider "aws" {
+  region                  = var.region
+  shared_credentials_file = var.shared_credentials_file
+  profile                 = var.aws_profile
 }
