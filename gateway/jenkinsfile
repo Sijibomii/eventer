@@ -40,7 +40,6 @@ node() {
   stage ('git push pre-prod'){
         sh "echo ${env.JOB_NAME} ${env.BUILD_NUMBER} > builds.txt"
         sh 'git add -A'
-        sh 'git checkout -b pre-prod'
         sh "git commit -m '${env.JOB_NAME} ${env.BUILD_NUMBER}'"
         sh "git remote add origin https://github.com/Sijibomii/eventer.git"
         sh "git push -u origin pre-prod"
