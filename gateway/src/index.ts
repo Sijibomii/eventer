@@ -14,6 +14,7 @@ const main = async () => {
 
   if (redisClient == null){
     //crash app
+    console.log('creash')
   }
 
   app.listen(3000, () => {
