@@ -35,7 +35,7 @@ node() {
             // }
         )
   stage('pre-pod image') {
-    sh "docker run --rm sijibomi242/eventer-gateway-dev cp /usr/src/app/Dockerfile.prod ."
+    sh "docker run --rm sijibomi242/eventer-gateway-dev cp /usr/src/app/Dockerfile.prod /var/lib/jenkins/workspace/eventer-gateway-dev"
     sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f Dockerfile.prod . "
   }
   post {
