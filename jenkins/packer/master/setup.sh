@@ -25,6 +25,8 @@ echo "Install Docker engine"
 yum update -y
 yum install docker -y
 usermod -aG docker ec2-user
+usermod -aG docker jenkins
+chmod 666 /var/run/docker.sock
 systemctl enable docker
 
 echo "Setup SSH key"

@@ -43,6 +43,7 @@ node() {
       // }
       success {
         scmInfo = checkout scm
+        sh 'yum localinstall gh_*_linux_amd64.rpm'
         sh 'git checkout pre-prod'
         sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t ${scmInfo.GIT_COMMIT}"
       } 
