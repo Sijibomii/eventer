@@ -20,7 +20,7 @@ node() {
                 sh "docker run --rm sijibomi242/eventer-gateway-dev npm run lint"
             },
             'Integration Tests': {
-                sh "docker run --rm sijibomi242/eventer-gateway-dev npm run test:ci --passWithNoTests"
+                sh "docker run --rm sijibomi242/eventer-gateway-dev npm run test:ci"
             },
             'Coverage Reports': {
                 sh "docker run --rm -v $PWD/coverage:/app/coverage sijibomi242/eventer-gateway-dev npm run coverage-html"

@@ -9,7 +9,7 @@
     "build": "tsc",
     "dev": "nodemon dist/index.js",
     "test": "jest --watchAll --no-cache",
-    "test:ci": "jest",
+    "test:ci": "jest --passWithNoTests",
     "lint": "eslint .",
     "coverage-text": "nyc --reporter=text mocha",
     "coverage-html": "nyc --reporter=html mocha"
