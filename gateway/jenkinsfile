@@ -6,11 +6,9 @@ node() {
 
   stage('docker-login') {
     withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: 'username', passwordVariable: 'password')]) {
-      // sh 'sudo chmod +s chmod 666 /var/run/docker.sock'
       sh 'docker login -u $username -p $password '
     }
-    //sh 'docker login -u sijibomi242 -p testpassword https://hub.docker.com/'
-   // sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+  
   }
   stage('docker-pull') {
     sh 'docker pull sijibomi242/eventer-gateway-dev:latest'
@@ -37,6 +35,11 @@ node() {
   stage('pre-pod image') {
     sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gateway/Dockerfile.prod . "
     sh 'docker push sijibomi242/eventer-gateway-pre-prod --all-tags'
+  }
+
+  stage ('git pull request'){
+        sh 'git checkout pre-prod'
+        sh "gh pr create -a @sijibomii -B pre-prod -H dev -b ${env.JOB_NAME} ${env.BUILD_NUMBER} -r sijibomii -t ${scmInfo.GIT_COMMIT}"
   }
   // post {
   //     // success {
