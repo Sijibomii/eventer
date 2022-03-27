@@ -40,6 +40,7 @@ node() {
   stage ('git push pre-prod'){
      withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
         sh "echo ${env.JOB_NAME} ${env.BUILD_NUMBER} > builds.txt"
+        sh 'git checkout --track origin/dev'
         sh 'git add -A'
         sh "git commit -m '${env.JOB_NAME} ${env.BUILD_NUMBER}'"
         sh "git remote set-url origin https://$username:$password@github.com/$username/eventer.git"
