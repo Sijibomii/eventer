@@ -40,7 +40,6 @@ node() {
 
   stage ('git push pre-prod'){
      withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
-        sh "echo 'j' "
         sh 'git checkout pre-prod'
         sh 'git cherry-pick dev' 
         // sh "echo ${env.JOB_NAME} ${env.BUILD_NUMBER} > builds.txt"
