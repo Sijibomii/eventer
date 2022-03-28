@@ -8,6 +8,7 @@ echo "Install Docker engine"
 yum update -y
 yum install docker -y
 usermod -aG docker packer
+chmod 666 /var/run/docker.sock 
 systemctl enable docker
 
 echo "Install git"

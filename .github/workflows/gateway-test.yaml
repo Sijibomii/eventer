@@ -28,7 +28,7 @@ jobs:
       - name: trigger jenkins build Job
         uses: appleboy/jenkins-action@master
         with:
-          url: "http://34.66.4.108:8080"
+          url: "http://34.66.4.108:8080/"
           user: "username"
           token: ${{ secrets.JENKINS_TOKEN}}
           job: "eventer-gateway-dev"

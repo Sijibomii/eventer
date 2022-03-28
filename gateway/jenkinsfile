@@ -37,7 +37,7 @@ node('workers') {
         )
   stage('pre-pod image') {
     sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gateway/Dockerfile.prod . "
-    sh 'docker push sijibomi242/eventer-gateway-pre-prod --all-tags'
+    sh "docker push sijibomi242/eventer-gateway-pre-prod --all-tags"
   }
 
   stage ('git push pre-prod'){
