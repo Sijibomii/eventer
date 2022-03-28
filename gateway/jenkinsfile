@@ -1,4 +1,4 @@
-node() {
+node('workers') {
 
    try{
 
@@ -37,7 +37,8 @@ node() {
         )
   stage('pre-pod image') {
     sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gateway/Dockerfile.prod . "
-    sh 'docker push sijibomi242/eventer-gateway-pre-prod --all-tags'
+    sh "docker push sijibomi242/eventer-gateway-pre-prod:latest"
+    sh "docker push sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER}"
   }
 
   stage ('git push pre-prod'){
@@ -57,7 +58,7 @@ node() {
       throw e
     } finally {
        notifySlack(currentBuild.result) 
-       sendEmail(currentBuild.result)
+       //sendEmail(currentBuild.result)
     }
   
 }
