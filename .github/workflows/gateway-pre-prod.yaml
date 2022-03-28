@@ -1,0 +1,20 @@
+name: gateway:pre-prod
+on:
+  push:
+    branches:
+      - pre-prod
+    paths:
+      - 'gateway/**'
+  pull_request:
+    branches:
+      - pre-prod
+    paths:
+      - 'gateway/**'
+jobs:
+  test:
+    name: pre-prod-gateway
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+## trigger th ansible play book to run on the jenkins server
