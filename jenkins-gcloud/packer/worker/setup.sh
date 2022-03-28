@@ -7,7 +7,7 @@ yum install -y java-1.8.0-openjdk
 echo "Install Docker engine"
 yum update -y
 yum install docker -y
-usermod -aG docker ec2-user
+usermod -aG docker packer
 systemctl enable docker
 
 echo "Install git"

@@ -41,7 +41,7 @@ node('workers') {
   }
 
   stage ('git push pre-prod'){
-     withCredentials( [usernamePassword(credentialsId: 'github-ID',  usernameVariable: 'username', passwordVariable: 'password')]) {
+     withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
         sh 'git checkout pre-prod'
         sh 'git pull origin dev'
         sh 'git pull'
@@ -57,7 +57,7 @@ node('workers') {
       throw e
     } finally {
        notifySlack(currentBuild.result) 
-       sendEmail(currentBuild.result)
+       //sendEmail(currentBuild.result)
     }
   
 }

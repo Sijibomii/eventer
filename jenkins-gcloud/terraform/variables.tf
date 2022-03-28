@@ -97,6 +97,6 @@ variable "jenkins_worker_machine_type" {
 variable "jenkins_worker_machine_image" {
     type = string
     description = "Machine image for worker host"
-    default = "jenkins-worker"
+    default = "jenkins-worker-2"
 }
 

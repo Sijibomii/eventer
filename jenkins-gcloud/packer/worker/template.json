@@ -7,7 +7,7 @@
     "builders" : [
         {
             "type": "googlecompute",
-            "image_name" : "jenkins-worker",
+            "image_name" : "jenkins-worker-2",
             "account_file": "{{user `service_account`}}",
             "project_id": "{{user `project`}}",
             "source_image_family": "centos-7",
