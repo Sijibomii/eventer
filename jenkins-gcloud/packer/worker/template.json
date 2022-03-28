@@ -1,0 +1,25 @@
+{
+    "variables" : {
+        "service_account" : "../../../../secrets/eventer-jenkins-cluster-27450e212bcd.json",
+        "project": "eventer-jenkins-cluster",
+        "zone": "us-central1-a"
+    },
+    "builders" : [
+        {
+            "type": "googlecompute",
+            "image_name" : "jenkins-worker",
+            "account_file": "{{user `service_account`}}",
+            "project_id": "{{user `project`}}",
+            "source_image_family": "centos-7",
+            "ssh_username": "packer",
+            "zone": "{{user `zone`}}"
+          }
+    ],
+    "provisioners" : [
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
