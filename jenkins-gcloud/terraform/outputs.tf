@@ -5,3 +5,7 @@ output "bastion" {
 output "jenkins" {
     value = google_compute_forwarding_rule.jenkins_master_forwarding_rule.ip_address
 }
+
+output "grafana" {
+    value = google_compute_forwarding_rule.grafana_forwarding_rule.ip_address
+}

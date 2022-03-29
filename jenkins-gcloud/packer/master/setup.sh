@@ -13,6 +13,22 @@ chkconfig jenkins on
 echo "Install git"
 yum install -y git
 
+echo "install grafana"
+yum install https://packages.grafana.com/enterprise/rpm
+systemctl daemon-reload
+systemctl start grafana-server
+systemctl status grafana-server
+systemctl enable grafana-server
+
+
+echo "install telegraph"
+yum install wget
+wget https://dl.influxdata.com/telegraf/releases/telegraf-1.19.0-1.x86_64.rpm
+yum localinstall -y telegraf-1.19.0-1.x86_64.rpm
+systemctl enable telegraf
+systemctl restart telegraf
+
+
 echo "install github cli"
 curl https://raw.githubusercontent.com/dvershinin/apt-get-centos/master/apt-get.sh -o /usr/local/bin/apt-get
 chmod 0755 /usr/local/bin/apt-get
