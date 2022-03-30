@@ -8,7 +8,7 @@ server.host: "0.0.0.0"
 server.name: "manning"
 
 # The URL of the Elasticsearch instance to use for all your queries.
-elasticsearch.hosts: "https://elasticsearch.domain.com:443"
+elasticsearch.hosts: "http://104.154.51.160:9200"
 
 newsfeed.enabled: false
 telemetry.optIn: false

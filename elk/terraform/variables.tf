@@ -97,3 +97,4 @@ variable "elastic_search_machine_image" {
     description = "Machine image for worker host"
     default = "elastic-search-img"
 }
+
