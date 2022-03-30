@@ -25,7 +25,7 @@ resource "google_compute_firewall" "allow_access_to_ui" {
 
   source_tags = ["jenkins-web"]
 }
-
+ 
 
 resource "google_compute_firewall" "allow_access_to_grafana_ui" {
   project = var.project
@@ -49,7 +49,7 @@ resource "google_compute_instance" "jenkins_master" {
   machine_type = var.jenkins_master_machine_type
   zone         = var.zone
 
-  tags = ["jenkins-ssh", "jenkins-web"]
+  tags = ["jenkins-ssh", "jenkins-web", "grafana-web"]
 
   depends_on = [google_compute_instance.bastion]
 
