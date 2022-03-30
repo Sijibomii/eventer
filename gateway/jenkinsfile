@@ -4,7 +4,7 @@ node('workers') {
 
      stage('checkout') {
       checkout scm
-      notifySlack('STARTED') 
+      //notifySlack('STARTED') 
       }
 
   stage('docker-login') {
@@ -57,7 +57,7 @@ node('workers') {
       currentBuild.result = 'FAILED' 
       throw e
     } finally {
-       notifySlack(currentBuild.result) 
+       //notifySlack(currentBuild.result) 
        //sendEmail(currentBuild.result)
     }
   
