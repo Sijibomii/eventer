@@ -1,7 +1,7 @@
 resource "google_compute_firewall" "allow_ssh_to_logstash" {
   project = var.project
   name    = "allow-ssh-to-logstash"
-  network = google_compute_network.management.self_link
+  network = google_compute_network.elk-management.self_link
 
   allow {
     protocol = "tcp"
@@ -11,10 +11,10 @@ resource "google_compute_firewall" "allow_ssh_to_logstash" {
   source_tags = ["bastion", "logstash-ssh"]
 }
 
-resource "google_compute_firewall" "logstash_sg" {
+resource "google_compute_firewall" "allow_traffic_into_logstash" {
   project = var.project
-  name    = "logstash_sg"
-  network = google_compute_network.management.self_link
+  name    = "allow-traffic-into-logstash"
+  network = google_compute_network.elk-management.self_link
 
   allow {
     protocol = "tcp"
@@ -42,7 +42,7 @@ resource "google_compute_instance" "logstash" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.private_subnets[0].self_link 
+    subnetwork = google_compute_subnetwork.elk-private_subnets[0].self_link 
   }
 
   metadata = {

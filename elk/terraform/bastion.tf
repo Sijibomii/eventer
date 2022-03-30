@@ -1,7 +1,7 @@
-resource "google_compute_firewall" "allow_ssl_to_bastion" {
+resource "google_compute_firewall" "elk_allow_ssl_to_bastion" {
   project = var.project
-  name    = "allow-ssl-to-bastion"
-  network = google_compute_network.management.self_link
+  name    = "elk-allow-ssl-to-bastion"
+  network = google_compute_network.elk-management.self_link
 
   allow {
     protocol = "tcp"
@@ -13,13 +13,13 @@ resource "google_compute_firewall" "allow_ssl_to_bastion" {
   source_tags = ["bastion"]
 }
 
-resource "google_compute_address" "static" {
-  name = "ipv4-address"
+resource "google_compute_address" "elk-static" {
+  name = "elk-ipv4-address"
 }
 
-resource "google_compute_instance" "bastion" {
+resource "google_compute_instance" "elk-bastion" {
   project      = var.project
-  name         = "bastion"
+  name         = "elk-bastion"
   machine_type = var.bastion_machine_type
   zone         = var.zone
 
@@ -32,10 +32,10 @@ resource "google_compute_instance" "bastion" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.public_subnets[0].self_link 
+    subnetwork = google_compute_subnetwork.elk-public_subnets[0].self_link 
 
     access_config {
-      nat_ip = google_compute_address.static.address
+      nat_ip = google_compute_address.elk-static.address
     }
   }
 

@@ -1,7 +1,7 @@
 resource "google_compute_firewall" "allow_ssh_to_elasticsearch" {
   project = var.project
   name    = "allow-ssh-to-elasticsearch"
-  network = google_compute_network.management.self_link
+  network = google_compute_network.elk-management.self_link
 
   allow {
     protocol = "tcp"
@@ -11,10 +11,10 @@ resource "google_compute_firewall" "allow_ssh_to_elasticsearch" {
   source_tags = ["bastion", "elasticsearch-ssh"]
 }
 
-resource "google_compute_firewall" "elasticsearch_sg" {
+resource "google_compute_firewall" "allow_traffic_into_elasticsearch" {
   project = var.project
-  name    = "elasticsearch_sg"
-  network = google_compute_network.management.self_link
+  name    = "allow-traffic-into-elasticsearch"
+  network = google_compute_network.elk-management.self_link
 
   allow {
     protocol = "tcp"
@@ -42,7 +42,7 @@ resource "google_compute_instance" "elasticsearch" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.private_subnets[0].self_link 
+    subnetwork = google_compute_subnetwork.elk-private_subnets[0].self_link 
   }
 
   metadata = {
