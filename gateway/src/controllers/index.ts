@@ -16,14 +16,17 @@ const pingController = (_: Request, res: Response) =>{
 }
 
 const returnCurrentUser = (req: Req, res: Response) => {
+  console.log(req)
   if(!req.session){
     res.send({
       "currentUser": "nill"
     }).status(200);
+  }else{
+    res.send({
+      "currentUser": req.session
+    }).status(200);
   }
-  res.send({
-    "currentUser": req.session
-  }).status(200);
+  
 }
 
 export { pingController, returnCurrentUser };

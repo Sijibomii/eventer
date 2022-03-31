@@ -1,14 +1,14 @@
-import request from 'supertest';
-import { app } from '../app';
+// import request from 'supertest';
+// import { app } from '../app';
 import  httpMocks from 'node-mocks-http';
 import { pingController, returnCurrentUser } from '../controllers/index';
 import assert from 'assert';
 import redis from 'redis';
 import { v4 as uuidv4 } from 'uuid';
 import { faker } from '@faker-js/faker';
-import jwt from 'jsonwebtoken'
-console.log(request)
-console.log(app)
+import jwt from 'jsonwebtoken';
+// console.log(request)
+// console.log(app)
 
 beforeAll(async () => {
   process.env.mode = 'dev';
@@ -16,27 +16,15 @@ beforeAll(async () => {
 
 
 // test that gateway receives request correctly
-test('gateway receives request', async () => {
-  const request  = httpMocks.createRequest({
-    method: 'GET',
-    url: 'gateway/ping',
-  });
-  const response = httpMocks.createResponse();
-  pingController(request, response);
-  const data = response._getJSONData();
-  assert.equal(data, {
-    "message": "ping"
-  });
-  assert.equal(200, response.statusCode)
-})
  
 describe('test to return current user', function () {
-  let fakeId = null;
-  let randomName = null;
-  let randomEmail = null;
+  let fakeId:any = null;
+  let randomName:any = null;
+  let randomEmail:any = null;
   let access_secret =null;
   let refresh_secret =null;
-  let jwt: any = null;
+  let jwtt:any = null
+
   beforeEach(async () => {
     fakeId= uuidv4();
     randomName = faker.name.findName(); 
@@ -51,7 +39,7 @@ describe('test to return current user', function () {
     }))
   
     //create jwt containing the info and has with secret access and refresh key
-    jwt = jwt.sign({ 
+     jwtt = jwt.sign({ 
       "id": fakeId,
       "email" : randomEmail,
       "username": randomName
@@ -60,28 +48,68 @@ describe('test to return current user', function () {
     })
   });
 
+
+  test('gateway receives request', async () => {
+    const request  = httpMocks.createRequest({
+      method: 'GET',
+      url: 'gateway/ping',
+    });
+    const response = httpMocks.createResponse();
+    pingController(request, response);
+    const data = response._getData();
+    assert.deepEqual(data, { "message": "pong"});
+    assert.equal(200, response.statusCode)
+  })
+
+  //TODO: TEST MIDDLEWARE!!
   // test that gateway recieves req and add session to it for auth users
   test('recieves access token and appends session to req', async()=>{
     const request  = httpMocks.createRequest({
       method: 'GET',
       url: '/auth/me',
       headers: {
-        authorization: `Bearer ${jwt}`
+        authorization: `Bearer ${jwtt}`
+      },
+      session:{
+        "id": fakeId,
+        "email" : randomEmail,
+        "username": randomName
       }
     });
     const response = httpMocks.createResponse();
     returnCurrentUser(request, response);
-    const data = response._getJSONData();
-    assert.equal(data, {
-      "message": "ping"
+    const data = response._getData();
+    assert.deepEqual(data, {
+      "currentUser": {
+        "id": fakeId,
+        "email" : randomEmail,
+        "username": randomName
+      }
     });
   });
-    
+
+  // test that gateway correctly returns currentUser when unauth
+  test('recieves access token and appends session to req', async()=>{
+    const request  = httpMocks.createRequest({
+      method: 'GET',
+      url: '/auth/me',
+    });
+    const response = httpMocks.createResponse();
+    returnCurrentUser(request, response);
+    const data = response._getData();
+    assert.deepEqual(data, {
+      "currentUser": "nill"
+    });
+  });
+
+  // test that gateway handles 404 error well
+  
+
+  //  test that gateway impl rate-limiting currectly
 });
 
 // test that gateway currectly handle unauth users for unauth route
 // test that gateway correctly routes req to currect server when unauth
-// test that gateway handles 404 error well
+
 //  test that gateway correctly interacts with a mocked redis for access secret
 // test that gateway correctly creates and stores access secret during registration
-//  test that gateway impl rate-limiting currectly
