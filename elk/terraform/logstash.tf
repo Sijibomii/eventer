@@ -26,6 +26,7 @@ resource "google_compute_firewall" "allow_traffic_into_logstash" {
   source_tags = ["logstash"]
 }
 
+
 resource "google_compute_instance" "logstash" {
   project      = var.project
   name         = "logstash"
@@ -41,7 +42,7 @@ resource "google_compute_instance" "logstash" {
     }
   }
 
-  network_interface {
+  network_interface { 
     subnetwork = google_compute_subnetwork.elk-private_subnets[0].self_link 
   }
 
@@ -69,7 +70,7 @@ resource "google_compute_http_health_check" "logstash_health_check" {
   request_path = "/"
   port = "5000"
   timeout_sec        = 4
-  check_interval_sec = 5
+  check_interval_sec = 300
 }
 
 resource "google_compute_forwarding_rule" "logstash_forwarding_rule" {
