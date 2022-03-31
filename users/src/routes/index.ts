@@ -54,7 +54,7 @@ router.post('/auth/signup', async function(req, res){
    const userRet = result.raw[0];
    res.json({
     id: userRet.id,
-    username: userRet.username,
+    username: userRet.username, 
     email: userRet.email,
     token: generateToken(userRet.id),// access and refresh
   })

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import httpProxy from "express-http-proxy";
 import checkAuth  from '../middleware/checkAuth';
+import { pingController,returnCurrentUser } from "../controllers";
 const router = Router();
 
 
@@ -10,6 +11,9 @@ router.post('gateway/refresh',function(req, res, next){
   console.log(res)
   console.log(next)
 });
+
+router.get('gateway/ping', pingController);
+
 //all user routes
 //write ip for user-srv load balancer
 // impl dns that returns ip
@@ -22,12 +26,7 @@ router.post('/auth/signup',function(req, res, next){
   userServiceProxy(req, res, next)
 });
 
-router.get('/auth/me', checkAuth ,function(req, res, next){
-  // this should be handled by gateway.. decode token and return data
-  console.log(req)
-  console.log(res)
-  console.log(next)
-});
+router.get('/auth/me', checkAuth, returnCurrentUser);
 //get a more detailed 
 router.get('/auth/me/detailed', checkAuth, function(req, res, next){
   userServiceProxy(req, res, next)
