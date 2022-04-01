@@ -5,7 +5,7 @@ import { pingController, returnCurrentUser } from '../controllers/index';
 import assert from 'assert';
 import redis from 'redis';
 import { v4 as uuidv4 } from 'uuid';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker'; 
 import jwt from 'jsonwebtoken';
 // console.log(request)
 // console.log(app)
