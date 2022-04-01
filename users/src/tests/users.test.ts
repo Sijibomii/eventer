@@ -1,4 +1,4 @@
-
+import assert from 'assert';
 
 describe('test to return current user', function () {
 
