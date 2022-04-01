@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: REDIS_CONFIG
+  namespace: staging
+type: Opaque
+data:
+  REDIS_URL: redis://users-redis-srv:6379/

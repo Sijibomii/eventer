@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: EVENTS_DB_CONFIG
+  namespace: staging
+type: Opaque
+data:
+  SECRET_KEY: staging-secret
+  SQL_ENGINE: django_cassandra_engine
+  SQL_DATABASE: events-db
+  TEST_NAME: test_db
+  SQL_HOST: events-db-srv
+  USER_NAME: staging_user
+  PASSWORD: staging_password
+  ALLOWED_HOSTS: all

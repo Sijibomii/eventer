@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: USERS_DB_CONFIG
+  namespace: staging
+type: Opaque
+data:
+  POSTGRES_DB: users_db
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres

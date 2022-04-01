@@ -5,6 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: events-depl
+  namespace: staging
 spec:
   replicas: 1
   selector:
@@ -17,7 +18,7 @@ spec:
     spec:
       containers:
         - name: events
-          image: sijibomi/events #TODO: image pull secret to auth with docker
+          image: sijibomi242/eventer-events-pre-prod:latest #TODO: image pull secret to auth with docker
           env:
             - name: SECRET_KEY
               valueFrom: 
@@ -58,12 +59,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: RABBITS_CONFIG
-                  key: RABBITS_USERNAME
+                  key: RABBITMQ_DEFAULT_USER
             - name: RABBITS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: RABBITS_CONFIG
-                  key: RABBITS_PASSWORD
+                  key: RABBITMQ_DEFAULT_PASS
             - name: RABBITS_HOST
               valueFrom:
                 secretKeyRef:
@@ -86,6 +87,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: events-loadbalancer
+  namespace: staging
 spec:
   type: LoadBalancer
   ports:
