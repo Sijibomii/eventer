@@ -19,6 +19,13 @@ jobs:
         working-directory: ./events
     env:
       SECRET_KEY: test-key-not-good-maybe-make-one-better
+      ALLOWED_HOSTS: [*]
+      RABBITS_USERNAME: fake-username
+      RABBITS_PASSWORD: fake-password
+      RABBITS_HOST: rabbit-host
+      RABBITS_PORT: rabbit-port
+      USER_NAME: user-name
+      PASSWORD: password
     strategy:
       matrix:
         python-version: [3.7]
