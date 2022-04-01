@@ -43,6 +43,8 @@ node('workers') {
 
   stage ('git push pre-prod'){
      withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
+        sh 'git config --global user.email "sijibomiolajubu@gmail.com"'
+        sh 'git config --global user.name "sijibomii"'
         sh 'git checkout pre-prod'
         sh 'git pull origin dev'
         sh 'git pull'
