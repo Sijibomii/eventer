@@ -20,12 +20,12 @@ spec:
             - name: RABBITMQ_DEFAULT_USER #name of env i.e pod will access the env with this name
               valueFrom: 
                 secretKeyRef:
-                  name: RABBITS_CONFIG #name of secret to get value from
+                  name: rabbits-config #name of secret to get value from
                   key: RABBITMQ_DEFAULT_USER #name of key in secret
             - name: RABBITMQ_DEFAULT_PASS 
               valueFrom: 
                 secretKeyRef:
-                  name: RABBITS_CONFIG 
+                  name: rabbits-config 
                   key: RABBITMQ_DEFAULT_PASS 
             - name: RABBITMQ_ERLANG_COOKIE
               value: erlang_dev_only_cookie

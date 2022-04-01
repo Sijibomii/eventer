@@ -1,10 +1,12 @@
-import redis , { RedisClientType } from 'redis';
+import * as redis  from 'redis';
+import  { RedisClientType } from 'redis';
 import { app } from './app';
 
 type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
 
 const main = async () => {
+
   redisClient = redis.createClient({
     url: process.env.REDIS_URL
   })
@@ -24,3 +26,4 @@ main().catch((err)=>{
   console.log(err)
 });
 
+ 

@@ -23,62 +23,62 @@ spec:
             - name: SECRET_KEY
               valueFrom: 
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG #name of secret to get value from
+                  name: events-db-config #name of secret to get value from
                   key: SECRET_KEY #name of key in secret
             - name: SQL_ENGINE
               valueFrom: 
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG
+                  name: events-db-config
                   key: SQL_ENGINE
             - name: SQL_DATABASE
               valueFrom: 
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG
+                  name: events-db-config
                   key: SQL_DATABASE
             - name: TEST_NAME
               valueFrom:
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG
+                  name: events-db-config
                   key: TEST_NAME
             - name: SQL_HOST
               valueFrom:
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG
+                  name: events-db-config
                   key: SQL_HOST
             - name: USER_NAME
               valueFrom:
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG
+                  name: events-db-config
                   key: USER_NAME
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG
+                  name: events-db-config
                   key: PASSWORD
             - name: RABBITS_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: RABBITS_CONFIG
+                  name: rabbits-config
                   key: RABBITMQ_DEFAULT_USER
             - name: RABBITS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: RABBITS_CONFIG
+                  name: rabbits-config
                   key: RABBITMQ_DEFAULT_PASS
             - name: RABBITS_HOST
               valueFrom:
                 secretKeyRef:
-                  name: RABBITS_CONFIG
+                  name: rabbits-config
                   key: RABBITS_HOST 
             - name: RABBITS_PORT
               valueFrom:
                 secretKeyRef:
-                  name: RABBITS_CONFIG
+                  name: rabbits-config
                   key: RABBITS_PORT
             - name: ALLOWED_HOSTS
               valueFrom:
                 secretKeyRef:
-                  name: EVENTS_DB_CONFIG
+                  name: events-db-config
                   key: ALLOWED_HOSTS
             
 
