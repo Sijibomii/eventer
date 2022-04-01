@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: ./events
     env:
-      DJANGO_SECRET_KEY: test-key-not-good-maybe-make-one-better
+      SECRET_KEY: test-key-not-good-maybe-make-one-better
     strategy:
       matrix:
         python-version: [3.7]
