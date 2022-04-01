@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-db-depl
+  namespace: staging
 spec:
   replicas: 1
   selector:
@@ -19,23 +20,24 @@ spec:
             - name: POSTGRES_DB #name of env i.e pod will access the env with this name
               valueFrom: 
                 secretKeyRef:
-                  name: USERS_DB_CONFIG #name of secret to get value from
+                  name: users-db-config #name of secret to get value from 
                   key: POSTGRES_DB #name of key in secret
             - name: POSTGRES_USER
               valueFrom: 
                 secretKeyRef:
-                  name: USERS_DB_CONFIG
+                  name: users-db-config
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom: 
                 secretKeyRef:
-                  name: USERS_DB_CONFIG
+                  name: users-db-config
                   key: POSTGRES_PASSWORD
 ---
 apiVersion: v1
 kind: Service 
 metadata:
   name: users-db-srv
+  namespace: staging
 spec:
   selector:
     app: users-db
