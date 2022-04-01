@@ -6,12 +6,14 @@ type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
 
 const main = async () => {
-
-  redisClient = redis.createClient({
-    url: process.env.REDIS_URL
-  })
-  await redisClient.connect()
-  if (redisClient == null && process.env.mode  === 'prod'){
+  if (process.env.NODE_ENV == 'production'){
+    redisClient = redis.createClient({
+      url: process.env.REDIS_URL
+    })
+    await redisClient.connect()
+  }
+  
+  if (redisClient == null && process.env.NODE_ENV  === 'production'){
     //crash app
     throw new Error('REDIS CLIENT must be defined');
   }
