@@ -6,7 +6,7 @@ let redisClient: redisClientType = null;
 
 const main = async () => {
   redisClient = redis.createClient({
-    url: 'redis://YOUR REDIS INSTANCE URL'
+    url: process.env.REDIS_URL
   })
   await redisClient.connect()
   if (redisClient == null && process.env.mode  === 'prod'){
@@ -17,7 +17,7 @@ const main = async () => {
     console.log('Listening on port 3000!!!!!!!!');
   });
 };
-
+ 
 export { redisClient };
 
 main().catch((err)=>{

@@ -1,0 +1,95 @@
+# CASSANDRA_USER: "cassandra" 
+      #CASSANDRA_PASSWORD: "cassandra"
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: events
+  template:
+    metadata:
+      labels:
+        app: events
+    spec:
+      containers:
+        - name: events
+          image: sijibomi/events #TODO: image pull secret to auth with docker
+          env:
+            - name: SECRET_KEY
+              valueFrom: 
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG #name of secret to get value from
+                  key: SECRET_KEY #name of key in secret
+            - name: SQL_ENGINE
+              valueFrom: 
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: SQL_ENGINE
+            - name: SQL_DATABASE
+              valueFrom: 
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: SQL_DATABASE
+            - name: TEST_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: TEST_NAME
+            - name: SQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: SQL_HOST
+            - name: USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: USER_NAME
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: PASSWORD
+            - name: RABBITS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_USERNAME
+            - name: RABBITS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_PASSWORD
+            - name: RABBITS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_HOST 
+            - name: RABBITS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: RABBITS_CONFIG
+                  key: RABBITS_PORT
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                secretKeyRef:
+                  name: EVENTS_DB_CONFIG
+                  key: ALLOWED_HOSTS
+            
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: events-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  targetPort: 8080
+  selector:
+  app: events

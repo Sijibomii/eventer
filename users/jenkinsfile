@@ -17,9 +17,9 @@ node('workers') {
     sh 'docker pull sijibomi242/eventer-users-dev:latest'
   }
   parallel(
-            'Quality Tests': {
-                sh "docker run --rm sijibomi242/eventer-users-dev npm run lint"
-            },
+            // 'Quality Tests': {
+            //     sh "docker run --rm sijibomi242/eventer-users-dev npm run lint"
+            // },
             'Integration Tests': {
                 sh "docker run --rm sijibomi242/eventer-users-dev npm run test:ci"
             }
