@@ -22,4 +22,4 @@
             "execute_command" : "sudo -E -S sh '{{ .Path }}'"
         }
     ]
-}
+} 

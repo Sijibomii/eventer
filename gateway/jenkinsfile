@@ -4,7 +4,7 @@ node('workers') {
 
      stage('checkout') {
       checkout scm
-      notifySlack('STARTED') 
+      //notifySlack('STARTED') 
       }
 
   stage('docker-login') {
@@ -17,10 +17,10 @@ node('workers') {
     sh 'docker pull sijibomi242/eventer-gateway-dev:latest'
   }
   parallel(
-            'Quality Tests': {
-                sh "docker run --rm sijibomi242/eventer-gateway-dev npm run lint"
-            },
-            'Integration Tests': {
+            // 'Quality Tests': {
+            //     sh "docker run --rm sijibomi242/eventer-gateway-dev npm run lint"
+            // },
+            'unit Tests': {
                 sh "docker run --rm sijibomi242/eventer-gateway-dev npm run test:ci"
             }
             // 'Coverage Reports': {
@@ -43,6 +43,8 @@ node('workers') {
 
   stage ('git push pre-prod'){
      withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
+        sh 'git config --global user.email "sijibomiolajubu@gmail.com"'
+        sh 'git config --global user.name "sijibomii"'
         sh 'git checkout pre-prod'
         sh 'git pull origin dev'
         sh 'git pull'
@@ -57,7 +59,7 @@ node('workers') {
       currentBuild.result = 'FAILED' 
       throw e
     } finally {
-       notifySlack(currentBuild.result) 
+       //notifySlack(currentBuild.result) 
        //sendEmail(currentBuild.result)
     }
   

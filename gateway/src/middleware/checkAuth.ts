@@ -1,7 +1,7 @@
 /* AUTHENTICATION MIDDLEWARE
  * This can be added to any route to check for an authenticated user
  */
-import { redisClient  } from '../index';
+import { redisClient } from '../index';
 import jwt from 'jsonwebtoken';
 import {Request, Response, NextFunction} from 'express';
 

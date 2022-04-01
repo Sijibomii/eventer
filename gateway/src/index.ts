@@ -5,24 +5,19 @@ type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
 
 const main = async () => {
-  
   redisClient = redis.createClient({
-    url: 'redis://YOUR REDIS INSTANCE URL'
+    url: process.env.REDIS_URL
   })
-
   await redisClient.connect()
-
-  if (redisClient == null){
+  if (redisClient == null && process.env.mode  === 'prod'){
     //crash app
-    console.log('creash')
+    throw new Error('REDIS CLIENT must be defined');
   }
-
   app.listen(3000, () => {
     console.log('Listening on port 3000!!!!!!!!');
   });
-
 };
-
+ 
 export { redisClient };
 
 main().catch((err)=>{

@@ -1,0 +1,30 @@
+{
+    "variables" : {
+        "service_account" : "../../../../secrets/eventer-jenkins-cluster-27450e212bcd.json",
+        "project": "eventer-jenkins-cluster",
+        "zone": "us-central1-a"
+    },
+    "builders" : [
+        {
+            "type": "googlecompute",
+            "image_name" : "kibana-img",
+            "account_file": "{{user `service_account`}}",
+            "project_id": "{{user `project`}}",
+            "source_image_family": "ubuntu-1804-lts",
+            "ssh_username": "packer",
+            "zone": "{{user `zone`}}"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "./kibana.yml",
+            "destination" : "/tmp/kibana.yml"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

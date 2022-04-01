@@ -100,3 +100,14 @@ variable "jenkins_worker_machine_image" {
     default = "jenkins-worker-2"
 }
 
+variable "influx_db_machine_type" {
+    type = string
+    description = "Instance type for the influx host"
+    default = "n1-standard-1"
+}
+
+variable "influx_db_machine_image" {
+    type = string
+    description = "Machine image for influx host"
+    default = "influx-db"
+}

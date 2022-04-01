@@ -29,15 +29,15 @@ const main = async() => {
   console.log('ran')
 
   redisClient = redis.createClient({
-    url: 'redis://YOUR REDIS INSTANCE URL'
+    url: process.env.REDIS_URL
   })
-
-  await redisClient.connect()
-
   if (redisClient == null){
     //crash app
     throw new Error('REDIS MUST BE DEFINED');
   }
+
+  await redisClient.connect()
+
 
   app.all('*', async (_,__) => {
     throw new NotFoundError();

@@ -1,0 +1,26 @@
+{
+  "variables": {
+    "service_account" : "../../../secrets/eventer-jenkins-cluster-27450e212bcd.json",
+    "project": "eventer-jenkins-cluster",
+    "zone": "us-central1-a"
+  },
+  
+  "builders": [
+    {
+      "type": "googlecompute",
+      "image_name": "eventer-k8s",
+      "project_id": "{{user `project`}}",
+      "source_image": "centos-7-v20181210",
+      "source_image_family": "centos-7",
+      "ssh_username": "packer",
+      "zone": "{{user `zone`}}",
+      "account_file": "{{ user `service_account_json`}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "./k8s.yaml"
+    }
+  ]
+}
