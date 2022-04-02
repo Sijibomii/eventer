@@ -22,7 +22,7 @@ spec:
           ports:
           - name: gateway-port
             containerPort: 3000
-          image: sijibomi242/eventer-gateway-pre-prod:latest #TODO: image pull secret to auth with docker
+          image: sijibomi242/eventer-gateway-pre-prod:latest 
           imagePullPolicy: Always
           envFrom:
             - secretRef:
