@@ -1,16 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: my-ingress
+  name: gateway-ingress
   namespace: staging
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "web-static-ip"
+    kubernetes.io/ingress.class: "nginx"
 spec:
-  rules:
-  - http:
-      paths:
-      - path: /?(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: gateway-loadbalancer
-            port:
-              number: 4000
+  defaultBackend:
+    service:
+      name: gateway-srv
+      port:
+        number: 3000

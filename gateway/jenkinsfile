@@ -55,6 +55,11 @@ node('workers') {
     }   
   }
 
+  stage('deploy to kube cluster'){
+    sh "sed -i 's/eventer-gateway-pre-prod:latest/eventer-gateway-pre-prod:${env.BUILD_ID}/g' ./staging-config/gateway.yaml"
+    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/gateway.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: true])
+  }
+
    }catch(e){
       currentBuild.result = 'FAILED' 
       throw e

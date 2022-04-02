@@ -15,7 +15,14 @@ spec:
     spec:
       containers:
         - name: gateway
-          image: sijibomi242/eventer-gateway-pre-prod:latest #TODO: image pull secret to auth with docker
+          readinessProbe:
+            httpGet:
+              path: /gateway/ping
+              port: 3000
+          ports:
+          - name: gateway-port
+            containerPort: 3000
+          image: sijibomi242/eventer-gateway-pre-prod:latest 
           imagePullPolicy: Always
           envFrom:
             - secretRef:
@@ -26,4 +33,22 @@ spec:
                 secretKeyRef:
                   name: redis-config
                   key: REDIS_URL
+            - name: NODE_ENV
+              value: production
+
+    
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: gateway-srv
+  namespace: staging
+spec:
+  selector:
+    app: gateway
+  ports:
+    - name: gateway-srv-port
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
 

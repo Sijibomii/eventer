@@ -5,16 +5,16 @@ import { pingController,returnCurrentUser } from "../controllers";
 const router = Router();
 
 
-router.post('gateway/refresh',function(req, res, next){
+router.post('/gateway/refresh',function(req, res, next){
   // send a new access token if refresh token is valid
   console.log(req)
   console.log(res)
   console.log(next)
 });
 
-router.get('gateway/ping', pingController);
+router.get('/gateway/ping', pingController);
 
-//all user routes
+//all user routes 
 //write ip for user-srv load balancer
 // impl dns that returns ip
 const userServiceProxy = httpProxy('usr-srv-ip')
