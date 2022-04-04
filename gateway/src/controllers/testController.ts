@@ -1,7 +1,7 @@
 import { Request, Response }  from "express";
 import { redisClient } from '../index';
 import axios from 'axios';
-import { USER_SRV_IP } from '../utils/constansts'
+//import { USER_SRV_IP } from '../utils/constansts'
 const redisTestController = async (_: Request, res: Response) =>{
   if (redisClient == null){
     res.send({
@@ -25,7 +25,7 @@ const redisTestController = async (_: Request, res: Response) =>{
 }
 
 const userServiceTestController = async (_: Request, res: Response) =>{
-  const resp = await axios.get(`http://${USER_SRV_IP}/test/ping/`)
+  const resp = await axios.get(`http://users-loadbalancer/test/ping/`)
   res.send(resp.data)
 }
 export { redisTestController, userServiceTestController };
