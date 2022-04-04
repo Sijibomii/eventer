@@ -3,7 +3,7 @@ import  { RedisClientType } from 'redis';
 import createError  from "http-errors";
 import express, {Request, Response, NextFunction, Errback}  from "express";
 import  indexRouter  from './routes';
-
+import { loadConstants } from './utils/constansts';
 
 type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
@@ -15,7 +15,7 @@ const main = async () => {
     })
     await redisClient.connect()
   }
-  
+  loadConstants();
   if (redisClient == null && process.env.NODE_ENV  === 'production'){
     //crash app
     throw new Error('REDIS CLIENT must be defined');
@@ -44,7 +44,7 @@ const main = async () => {
   });
 };
  
-export { redisClient };
+export { redisClient};
 
 main().catch((err)=>{
   console.log(err)

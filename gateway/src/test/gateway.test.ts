@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { faker } from '@faker-js/faker'; 
 import jwt from 'jsonwebtoken';
 // console.log(request)
-// console.log(app)
+// console.log(app) 
 
 beforeAll(async () => {
   process.env.mode = 'dev';

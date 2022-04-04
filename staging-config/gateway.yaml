@@ -35,6 +35,8 @@ spec:
                   key: REDIS_URL
             - name: NODE_ENV
               value: production
+            - name: USER_SRV_IP
+              value: users-loadbalancer
 
     
 ---
