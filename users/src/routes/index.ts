@@ -5,7 +5,8 @@ import argon2 from "argon2";
 import generateToken  from '../utils/generateToken';
 const router = Router();
 
-router.get('/test/ping/', function (_, res){
+router.get('/users/test/ping/', function (_, res){
+  console.log('PONGGGGGGGGGGGGGGGGGGGGGG')
   res.send({
     "message":"pong"
   }).status(200)
