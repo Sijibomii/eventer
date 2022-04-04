@@ -7,9 +7,8 @@ describe('test gateways integration with redis', function () {
   test('gateway integrates well with redis', async function () { 
     const response = await axios.get('http://34.102.248.67/gateway/test/redis/');
     const  { data } = response;
-    const dt = JSON.parse(data);
-    assert.equal(dt.length, 2);
-    assert.deepEqual(dt[0], {
+    assert.equal(data.length, 2);
+    assert.deepEqual(data[0], {
       "id": "test-id",
       "name": "random"
     })
