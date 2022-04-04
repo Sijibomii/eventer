@@ -5,7 +5,7 @@ import argon2 from "argon2";
 import generateToken  from '../utils/generateToken';
 const router = Router();
 
-router.get('/test/ping/', async function (_, res){
+router.get('/test/ping/', function (_, res){
   res.send({
     "message":"pong"
   }).status(200)
@@ -80,4 +80,6 @@ router.get('/auth/me/detailed', async function(req: any, res){
 
 });
 
+
+export default router;
 
