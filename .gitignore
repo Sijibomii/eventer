@@ -1,6 +1,8 @@
 gateway/node_modules
 gateway/dist
 
+tests/integrations/gateway/node_modules
+
 users/node_modules
 users/dist
 

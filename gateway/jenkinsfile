@@ -16,27 +16,27 @@ node('workers') {
   stage('docker-pull') {
     sh 'docker pull sijibomi242/eventer-gateway-dev:latest'
   }
-  parallel(
-            // 'Quality Tests': {
-            //     sh "docker run --rm sijibomi242/eventer-gateway-dev npm run lint"
-            // },
-            'unit Tests': {
-                sh "docker run --rm sijibomi242/eventer-gateway-dev npm run test:ci"
-            }
-            // 'Coverage Reports': {
-            //     sh "docker run --rm -v $PWD/coverage:/app/coverage sijibomi242/eventer-gateway-dev npm run coverage-html"
-            //     publishHTML (target: [
-            //         allowMissing: false,
-            //         alwaysLinkToLastBuild: false,
-            //         keepAll: true,
-            //         reportDir: "$PWD/coverage",
-            //         reportFiles: "index.html",
-            //         reportName: "Coverage Report"
-            //     ])
-            // }
-        )
+  // parallel(
+  //           // 'Quality Tests': {
+  //           //     sh "docker run --rm sijibomi242/eventer-gateway-dev npm run lint"
+  //           // },
+  //           // 'unit Tests': {
+  //           //     sh "docker run --rm sijibomi242/eventer-gateway-dev npm run test:ci"
+  //           // }
+  //           // 'Coverage Reports': {
+  //           //     sh "docker run --rm -v $PWD/coverage:/app/coverage sijibomi242/eventer-gateway-dev npm run coverage-html"
+  //           //     publishHTML (target: [
+  //           //         allowMissing: false,
+  //           //         alwaysLinkToLastBuild: false,
+  //           //         keepAll: true,
+  //           //         reportDir: "$PWD/coverage",
+  //           //         reportFiles: "index.html",
+  //           //         reportName: "Coverage Report"
+  //           //     ])
+  //           // }
+  //       )
   stage('pre-pod image') {
-    sh "docker build -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gateway/Dockerfile.prod . "
+    sh "docker build --no-cache -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gateway/Dockerfile.prod . "
     sh "docker push sijibomi242/eventer-gateway-pre-prod:latest"
     sh "docker push sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER}"
   }
@@ -53,6 +53,11 @@ node('workers') {
         sh 'git push origin pre-prod'
         //notifySlack('FINISHED BUILD') 
     }   
+  }
+
+  stage('deploy to kube cluster'){
+    sh "sed -i 's/eventer-gateway-pre-prod:latest/eventer-gateway-pre-prod:${env.BUILD_ID}/g' ./staging-config/gateway.yaml"
+    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/gateway.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
   }
 
    }catch(e){

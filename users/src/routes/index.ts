@@ -5,6 +5,12 @@ import argon2 from "argon2";
 import generateToken  from '../utils/generateToken';
 const router = Router();
 
+router.get('/test/ping/', async function (_, res){
+  res.send({
+    "message":"pong"
+  }).status(200)
+});
+
 router.post('/auth/login', async function  (req, res) {
   // handle shit here
   const { email, password } = req.body;

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-redis-depl
+  namespace: staging
 spec:
   replicas: 1
   selector:
@@ -20,6 +21,7 @@ apiVersion: v1
 kind: Service 
 metadata:
   name: users-redis-srv
+  namespace: staging
 spec:
   selector:
     app: users-redis

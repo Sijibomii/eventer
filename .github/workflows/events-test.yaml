@@ -18,7 +18,14 @@ jobs:
       run:
         working-directory: ./events
     env:
-      DJANGO_SECRET_KEY: test-key-not-good-maybe-make-one-better
+      SECRET_KEY: test-key-not-good-maybe-make-one-better
+      ALLOWED_HOSTS: "[*]"
+      RABBITS_USERNAME: fake-username
+      RABBITS_PASSWORD: fake-password
+      RABBITS_HOST: rabbit-host
+      RABBITS_PORT: rabbit-port
+      USER_NAME: user-name
+      PASSWORD: password
     strategy:
       matrix:
         python-version: [3.7]
@@ -35,26 +42,17 @@ jobs:
       - name: Run Tests
         run: |
           python manage.py test
-      - run: docker build -t sijibomi242/eventer-events-dev .
+      - run: docker build -t sijibomi242/eventer-events-dev:latest -t sijibomi242/eventer-events-dev:${GITHUB_SHA::7}-${GITHUB_RUN_ID::5} .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push sijibomi242/eventer-events-dev
-      - name: Create Pull Request
-        id: sxxidhuhfiehijij
-        uses: peter-evans/create-pull-request@v3
+      - run: docker push sijibomi242/eventer-events-dev --all-tags
+      - name: trigger jenkins build Job
+        uses: appleboy/jenkins-action@master
         with:
-          token: ${{ secrets.TOKEN }}
-          commit-message: ${{ github.event.head_commit.message }}
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          branch: dev
-          delete-branch: false
-          title: ${{ github.event.head_commit.message }}
-          labels: |
-            report
-            automated pr
-          assignees: sijibomii
-          reviewers: sijibomii
-          base: pre-prod
+          url: ${{ secrets.JENKINS_URL }} 
+          user: "username"
+          token: ${{ secrets.JENKINS_TOKEN}}
+          job: "eventer-events-dev"
+      

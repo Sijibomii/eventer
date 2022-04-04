@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-depl
+  namespace: staging
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: sijibomi/users #TODO: image pull secret to auth with docker
+          image: sijibomi242/eventer-users-pre-prod:latest #TODO: image pull secret to auth with docker
           env:
             - name: POSTGRES_DB #name of env i.e pod will access the env with this name
               valueFrom: 
@@ -42,10 +43,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: users-loadbalancer
+  namespace: staging
 spec:
   type: LoadBalancer
   ports:
   - port: 80
-  targetPort: 8080
+  targetPort: 4000 
   selector:
   app: users
+
+
