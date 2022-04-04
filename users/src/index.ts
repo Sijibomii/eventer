@@ -6,7 +6,7 @@ import { json } from 'body-parser';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './middleware/NotfoundError';
 import indexRouter from './routes/index'
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
 
@@ -14,7 +14,7 @@ const main = async() => {
   const app = express();
 
   app.set('trust proxy', true);
-  
+
   app.use(json());
   const conn= await createConnection({
     type: 'postgres',
