@@ -44,8 +44,14 @@ const checkAuth = async (req: Req, res: Response, next: NextFunction) => {
     } catch (error) {
       console.error(error)
       res.status(401)
-      throw new Error('Not authorized, token failed')
+      //throw new Error('Not authorized, token failed')
     }
+  } 
+  else{
+    res.send({
+      "message":"Not authorized"
+    }).status(401);
+    // throw new Error('Not authorized, no token')
   }
 }
 

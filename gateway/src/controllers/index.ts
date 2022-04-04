@@ -1,6 +1,6 @@
 import { Request, Response }  from "express";
 
-interface Req extends Request {
+interface Req extends Request { 
   session?: {
     email: string,
     username: string,
