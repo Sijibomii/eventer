@@ -2,7 +2,7 @@
 //import axios from 'axios';
 const axios = require('axios');
 const assert = require('assert');
-describe('test gateways integration with redis', async function () {
+describe('test gateways integration with redis', function () {
 
   test('gateway integrates well with redis', async function () { 
     const response = await axios.get('http://34.102.248.67/gateway/test/redis/');
