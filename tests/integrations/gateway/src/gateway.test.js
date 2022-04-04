@@ -16,7 +16,7 @@ describe('test gateways integration with redis', function () {
 
 
   test('gateway integrates well with users', async function () {
-    const response = await axios.get('http://34.102.248.67/gateway/test/users/');
+    const response = await axios.get('http://34.102.248.67/gateway/test/users/'); 
     const  { data } = response;
     assert.deepEqual(data, {
       "message":"pong"

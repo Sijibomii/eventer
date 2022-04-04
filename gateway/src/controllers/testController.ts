@@ -24,7 +24,7 @@ const redisTestController = async (_: Request, res: Response) =>{
   res.send(get).status(200)
 }
 
-const userServiceTestController = async (_: Request, res: Response) =>{
+const userServiceTestController = async (_: Request, res: Response) =>{ 
   const resp = await axios.get(`http://users-srv/test/ping/`)
   res.send(resp.data)
 }
