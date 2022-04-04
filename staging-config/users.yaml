@@ -20,22 +20,22 @@ spec:
             - name: POSTGRES_DB #name of env i.e pod will access the env with this name
               valueFrom: 
                 secretKeyRef:
-                  name: USERS_DB_CONFIG #name of secret to get value from
+                  name: users-db-config #name of secret to get value from
                   key: POSTGRES_DB #name of key in secret
-            - name: POSTGRES_USER
+            - name: POSTGRES_USER 
               valueFrom: 
                 secretKeyRef:
-                  name: USERS_DB_CONFIG
+                  name: users-db-config
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom: 
                 secretKeyRef:
-                  name: USERS_DB_CONFIG
+                  name: users-db-config
                   key: POSTGRES_PASSWORD
             - name: REDIS_URL
               valueFrom: 
                 secretKeyRef:
-                  name: REDIS_CONFIG
+                  name: redis-config
                   key: REDIS_URL
 
 ---
