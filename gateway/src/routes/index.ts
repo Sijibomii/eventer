@@ -18,6 +18,7 @@ router.get('/gateway/ping', pingController);
 
 // find a way to remove this in prod
 router.get('/gateway/test/redis', redisTestController);
+
 router.get('/gateway/test/users', userServiceTestController )
 //all user routes 
 //write ip for user-srv load balancer
