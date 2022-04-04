@@ -1,5 +1,7 @@
 import express from "express";
 import { createConnection } from "typeorm";
+import "reflect-metadata"
+//mport { DataSource } from "typeorm"
 import path from "path";
 import redis , { RedisClientType } from 'redis';
 import { json } from 'body-parser';
@@ -15,10 +17,10 @@ const main = async() => {
   const app = express();
   app.set('trust proxy', true);
   app.use(json());
-  const conn= await createConnection({
+  const conn = await createConnection({
     type: 'postgres',
     host: 'users-db-srv',
-    database: process.env.POSTGRES_DB,//new db
+    database: process.env.POSTGRES_DB,
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     logging: true,
