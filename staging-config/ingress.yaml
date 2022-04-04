@@ -4,11 +4,21 @@ metadata:
   name: gateway-ingress
   namespace: staging
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: "web-static-ip"
+    kubernetes.io/ingress.global-static-ip-name: "eventer-static-ip"
+    kubernetes.io/ingress.allow-http: "true"
     kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: "gce"
 spec:
-  defaultBackend:
-    service:
-      name: gateway-srv
-      port:
-        number: 3000
+  rules:
+  - http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: gateway-srv
+            port:
+              number: 3000
+
+
+

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import httpProxy from "express-http-proxy";
+
 import checkAuth  from '../middleware/checkAuth';
 import { pingController,returnCurrentUser } from "../controllers";
 const router = Router();
@@ -17,7 +18,8 @@ router.get('/gateway/ping', pingController);
 //all user routes 
 //write ip for user-srv load balancer
 // impl dns that returns ip
-const userServiceProxy = httpProxy('usr-srv-ip')
+
+const userServiceProxy = httpProxy('')
 router.post('/auth/login', function(req, res, next){
   userServiceProxy(req, res, next)
 });

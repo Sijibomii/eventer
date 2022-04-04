@@ -1,0 +1,25 @@
+{
+  "name": "gateway-integrations-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll --no-cache",
+    "test:ci": "jest --passWithNoTests"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": []
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/supertest": "^2.0.11",
+    "@types/jest": "^27.4.1",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.3",
+    "supertest": "^6.2.2"
+  }
+}
+ 
