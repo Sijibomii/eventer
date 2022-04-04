@@ -13,7 +13,6 @@ let redisClient: redisClientType = null;
 
 const main = async() => {
   const app = express();
-
   app.set('trust proxy', true);
   app.use(json());
   const conn= await createConnection({
@@ -28,7 +27,7 @@ const main = async() => {
     entities: [User] // add entitites here
   });
 
-  await conn.runMigrations();
+  //await conn.runMigrations();
   console.log('ran')
 
   redisClient = redis.createClient({
