@@ -14,4 +14,4 @@ export class Initial1597626060117 implements MigrationInterface {
       
     }
 
-}
+} 
