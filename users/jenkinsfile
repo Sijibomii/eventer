@@ -56,7 +56,7 @@ node('workers') {
 
     stage('deploy to kube cluster'){
     sh "sed -i 's/eventer-users-pre-prod:latest/eventer-users-pre-prod:${env.BUILD_ID}/g' ./staging-config/users.yaml"
-    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/gateway.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
+    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/users.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
   }
   }
 
