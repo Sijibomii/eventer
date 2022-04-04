@@ -25,7 +25,7 @@ const redisTestController = async (_: Request, res: Response) =>{
 }
 
 const userServiceTestController = async (_: Request, res: Response) =>{
-  const resp = await axios.get(`http://users-loadbalancer/test/ping/`)
+  const resp = await axios.get(`http://users-srv/test/ping/`)
   res.send(resp.data)
 }
 export { redisTestController, userServiceTestController };
