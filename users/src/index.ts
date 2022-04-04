@@ -4,11 +4,11 @@ import "reflect-metadata"
 //mport { DataSource } from "typeorm"
 import path from "path";
 import * as redis from 'redis';
-import { RedisClientType } from 'redis';
+import { RedisClientType } from 'redis'; 
 import { json } from 'body-parser';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './middleware/NotfoundError';
-import indexRouter from './routes/index'
+import indexRouter from './routes'
 import { User } from './entities/user'
 // const __dirname = path.resolve();
 type redisClientType = RedisClientType | null;
