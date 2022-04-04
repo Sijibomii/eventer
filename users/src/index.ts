@@ -12,7 +12,9 @@ let redisClient: redisClientType = null;
 
 const main = async() => {
   const app = express();
+
   app.set('trust proxy', true);
+  
   app.use(json());
   const conn= await createConnection({
     type: 'postgres',
