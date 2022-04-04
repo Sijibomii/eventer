@@ -2,7 +2,7 @@ import { Router } from "express";
 import httpProxy from "express-http-proxy";
 import { redisTestController, userServiceTestController } from '../controllers/testController'
 import checkAuth  from '../middleware/checkAuth';
-import { USER_SRV_IP } from '../utils/constansts';
+//import { USER_SRV_IP } from '../utils/constansts';
 import { pingController,returnCurrentUser } from "../controllers";
 const router = Router();
 
@@ -23,7 +23,8 @@ router.get('/gateway/test/users',userServiceTestController )
 //write ip for user-srv load balancer
 // impl dns that returns ip
 
-const userServiceProxy = httpProxy(USER_SRV_IP)
+const userServiceProxy = httpProxy('users-loadbalancer')
+
 router.post('/auth/login', function(req, res, next){
   userServiceProxy(req, res, next)
 });
