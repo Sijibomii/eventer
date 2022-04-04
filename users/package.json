@@ -29,8 +29,9 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
+    "reflect-metadata": "^0.1.13",
     "redis": "^4.0.4",
-    "typeorm": "^0.2.45",
+    "typeorm": "0.2.32",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
