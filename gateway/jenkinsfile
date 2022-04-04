@@ -60,12 +60,18 @@ node('workers') {
     step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/gateway.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
   }
 
+  stage('integrations testing'){
+    sh 'docker build --no-cache -t eventer/gateway-test -f ./tests/integrations/gateway/Dockerfile .'
+    sh "docker run --rm eventer/gateway-test npm run test:ci"
+  }
+
    }catch(e){
       currentBuild.result = 'FAILED' 
       throw e
     } finally {
        //notifySlack(currentBuild.result) 
        //sendEmail(currentBuild.result)
+       //role back kube deployment if any
     }
   
 }
