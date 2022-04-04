@@ -29,7 +29,11 @@ router.post('/auth/login', async function  (req, res) {
     id: user.id,
     username: user.username,
     email: user.email,
-    token: generateToken(user.id),// access and refresh
+    token: generateToken({
+    id: user.id,
+    username: user.username,
+    email: user.email
+    }),// access and refresh 
   })
 
 });
@@ -68,15 +72,19 @@ router.post('/auth/signup', async function(req, res){
 });
 
 router.get('/auth/me/detailed', async function(req: any, res){
-  
   // req.session should have details already
   const session: any = req.session
   const user = await User.findOne(session.email);
-  res.json({
-    id: user.id,
-    username: user.username,
-    email: user.email
-  })
+  if (user){
+    res.json({
+      id: user.id,
+      username: user.username,
+      email: user.email
+    })
+  }else{
+    res.json({})
+  }
+  
 
 });
 
