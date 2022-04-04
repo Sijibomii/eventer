@@ -3,7 +3,8 @@ import { createConnection } from "typeorm";
 import "reflect-metadata"
 //mport { DataSource } from "typeorm"
 import path from "path";
-import redis , { RedisClientType } from 'redis';
+import * as redis from 'redis';
+import { RedisClientType } from 'redis';
 import { json } from 'body-parser';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './middleware/NotfoundError';
@@ -21,7 +22,7 @@ const main = async() => {
     type: 'postgres',
     host: 'users-db-srv',
     database: process.env.POSTGRES_DB,
-    username: process.env.POSTGRES_USER,
+    username: process.env.POSTGRES_USER, 
     password: process.env.POSTGRES_PASSWORD,
     logging: true,
     synchronize: true,
