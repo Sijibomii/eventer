@@ -31,7 +31,7 @@ router.post('/auth/login', function(req, res, next){
 router.post('/auth/signup',function(req, res, next){
   userServiceProxy(req, res, next)
 });
-
+//??
 router.get('/auth/me', checkAuth, returnCurrentUser); 
 //get a more detailed 
 router.get('/auth/me/detailed', checkAuth, function(req, res, next){
