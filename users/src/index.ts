@@ -5,7 +5,7 @@ import redis , { RedisClientType } from 'redis';
 import { json } from 'body-parser';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './middleware/NotfoundError';
-
+import indexRouter from './routes/index'
 const __dirname = path.resolve();
 type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
@@ -38,7 +38,7 @@ const main = async() => {
 
   await redisClient.connect()
 
-
+  app.use('/', indexRouter);
   app.all('*', async (_,__) => {
     throw new NotFoundError();
   });
