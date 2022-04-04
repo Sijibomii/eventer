@@ -1,6 +1,7 @@
-import assert from 'assert';
-import axios from 'axios';
-
+//import assert from 'assert';
+//import axios from 'axios';
+const axios = require('axios');
+const assert = require('assert');
 describe('test gateways integration with redis', async function () {
 
   test('gateway integrates well with redis', async function () { 
