@@ -39,17 +39,21 @@ spec:
                   key: REDIS_URL
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: users-loadbalancer
-  namespace: staging
+  name: users-srv
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-  targetPort: 4000 
   selector:
-  app: users
+    app: users
+  ports:
+    - name: users
+      protocol: TCP
+      port: 80
+      targetPort: 4000
 
 
+
+
+ 
