@@ -52,7 +52,7 @@ node('workers') {
         sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.git'
         sh 'git push origin pre-prod'
     }   
-  }
+  } 
 
   stage('deploy to kube cluster'){
     sh "sed -i 's/eventer-gateway-pre-prod:latest/eventer-gateway-pre-prod:${env.BUILD_ID}/g' ./staging-config/gateway.yaml"

@@ -29,7 +29,7 @@ node('workers') {
             //         allowMissing: false,
             //         alwaysLinkToLastBuild: false,
             //         keepAll: true,
-            //         reportDir: "$PWD/coverage",
+            //         reportDir: "$PWD/coverage", 
             //         reportFiles: "index.html",
             //         reportName: "Coverage Report"
             //     ])
@@ -53,6 +53,11 @@ node('workers') {
         sh 'git push origin pre-prod'
         //notifySlack('FINISHED BUILD') 
     }   
+
+    stage('deploy to kube cluster'){
+    sh "sed -i 's/eventer-users-pre-prod:latest/eventer-users-pre-prod:${env.BUILD_ID}/g' ./staging-config/users.yaml"
+    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/gateway.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
+  }
   }
 
    }catch(e){
