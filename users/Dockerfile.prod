@@ -1,11 +1,11 @@
 FROM node:16.14.0-alpine
 WORKDIR /usr/src/app
 
-COPY gateway/package.json gateway/package-lock.json ./
+COPY users/package.json users/package-lock.json ./
 
 RUN npm i
 
-COPY ./gateway .
+COPY ./users .
 
 RUN npm run build
 

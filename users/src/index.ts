@@ -1,12 +1,16 @@
 import express from "express";
 import { createConnection } from "typeorm";
+import "reflect-metadata"
+//mport { DataSource } from "typeorm"
 import path from "path";
-import redis , { RedisClientType } from 'redis';
+import * as redis from 'redis';
+import { RedisClientType } from 'redis';
 import { json } from 'body-parser';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './middleware/NotfoundError';
 import indexRouter from './routes/index'
-const __dirname = path.resolve();
+import { User } from './entities/user'
+// const __dirname = path.resolve();
 type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
 
@@ -14,19 +18,20 @@ const main = async() => {
   const app = express();
   app.set('trust proxy', true);
   app.use(json());
-  const conn= await createConnection({
+  const conn = await createConnection({
     type: 'postgres',
-    database: process.env.POSTGRES_DB,//new db
-    username: process.env.POSTGRES_USER,
+    host: 'users-db-srv',
+    database: process.env.POSTGRES_DB,
+    username: process.env.POSTGRES_USER, 
     password: process.env.POSTGRES_PASSWORD,
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [] // add entitites here
+    entities: [User] // add entitites here
   });
 
-  await conn.runMigrations();
-  console.log('ran')
+  //await conn.runMigrations();
+  console.log(conn)
 
   redisClient = redis.createClient({
     url: process.env.REDIS_URL
