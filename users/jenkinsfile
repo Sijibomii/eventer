@@ -66,6 +66,7 @@ node('workers') {
     } finally {
        //notifySlack(currentBuild.result) 
        //sendEmail(currentBuild.result)
+      
     }
   
 }
