@@ -23,7 +23,7 @@ router.get('/gateway/test/users', userServiceTestController )
 //write ip for user-srv load balancer
 // impl dns that returns ip
 
-const userServiceProxy = httpProxy('users-loadbalancer')
+const userServiceProxy = httpProxy('users-srv')
 
 router.post('/auth/login', function(req, res, next){
   userServiceProxy(req, res, next)
