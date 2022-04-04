@@ -28,7 +28,7 @@ const main = async() => {
   });
 
   //await conn.runMigrations();
-  console.log('ran')
+  console.log(conn)
 
   redisClient = redis.createClient({
     url: process.env.REDIS_URL
