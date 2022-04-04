@@ -51,7 +51,6 @@ node('workers') {
         //sh 'git merge dev'
         sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.git'
         sh 'git push origin pre-prod'
-        //notifySlack('FINISHED BUILD') 
     }   
   }
 
