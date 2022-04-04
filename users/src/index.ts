@@ -6,6 +6,7 @@ import { json } from 'body-parser';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './middleware/NotfoundError';
 import indexRouter from './routes/index'
+import { User } from './entities/user'
 // const __dirname = path.resolve();
 type redisClientType = RedisClientType | null;
 let redisClient: redisClientType = null;
@@ -14,17 +15,17 @@ const main = async() => {
   const app = express();
 
   app.set('trust proxy', true);
-
   app.use(json());
   const conn= await createConnection({
     type: 'postgres',
+    host: 'users-db-srv',
     database: process.env.POSTGRES_DB,//new db
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [] // add entitites here
+    entities: [User] // add entitites here
   });
 
   await conn.runMigrations();

@@ -24,7 +24,7 @@ spec:
                   key: POSTGRES_DB #name of key in secret
             - name: POSTGRES_USER
               valueFrom: 
-                secretKeyRef:
+                secretKeyRef: 
                   name: users-db-config
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
