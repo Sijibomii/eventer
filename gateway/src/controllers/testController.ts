@@ -26,7 +26,7 @@ const redisTestController = async (_: Request, res: Response) =>{
 
 const userServiceTestController = async (_: Request, res: Response) =>{ 
   console.log('CALLINGGGGGGGGGGGGGGGGGGGGG')
-  const resp = await axios.get(`http://users-srv.svc.cluster.local:80/users/test/ping/`)
+  const resp = await axios.get(`http://users-srv.staging.svc.cluster.local:80/users/test/ping/`)
   res.send(resp.data)
 }
 export { redisTestController, userServiceTestController };
