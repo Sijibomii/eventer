@@ -10,7 +10,7 @@ const router = Router();
 router.post('/gateway/refresh',function(req, res, next){
   // send a new access token if refresh token is valid
   console.log(req)
-  console.log(res)
+  console.log(res) 
   console.log(next)
 });
 
@@ -32,7 +32,7 @@ router.post('/auth/signup',function(req, res, next){
   userServiceProxy(req, res, next)
 });
 
-router.get('/auth/me', checkAuth, returnCurrentUser);
+router.get('/auth/me', checkAuth, returnCurrentUser); 
 //get a more detailed 
 router.get('/auth/me/detailed', checkAuth, function(req, res, next){
   userServiceProxy(req, res, next)
