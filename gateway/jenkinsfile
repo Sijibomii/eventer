@@ -61,7 +61,7 @@ node('workers') {
   }
 
   stage('integrations testing'){
-    sh 'docker build --no-cache -t eventer/gateway-test -f ./tests/integrations/gateway/Dockerfile .'
+    sh 'docker build --no-cache -t eventer/gateway-test -f ./tests/integrations/gateway/Dockerfile ./tests/integrations/gateway'
     sh "docker run --rm eventer/gateway-test npm run test:ci"
   }
 
