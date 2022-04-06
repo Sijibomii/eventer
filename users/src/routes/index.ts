@@ -1,15 +1,72 @@
 import { Router } from "express";
 import { User } from '../entities/user';
-import { getConnection } from  "typeorm";
+import { getConnection } from  "typeorm"; 
 import argon2 from "argon2";
 import generateToken  from '../utils/generateToken';
+import { faker } from '@faker-js/faker';  
+import { redisClient } from "../index";
 const router = Router();
 
 router.get('/users/test/ping/', function (_, res){
-  console.log('PONGGGGGGGGGGGGGGGGGGGGGG')
   res.send({
     "message":"pong"
   }).status(200)
+});
+
+router.get('/users/test/postgres/', async function  (_, res) {
+
+  const rslt = await getConnection()
+  .createQueryBuilder()
+  .insert()
+  .into(User)
+  .values({
+    username: faker.name.findName(),
+    email: faker.internet.email(),
+    password: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  })
+  .returning("*")
+  .execute();
+
+  const result = rslt.raw[0];
+
+  res.json([
+    {
+      id: result.id,
+      username: result.username, 
+      email: result.email,
+    },
+    {
+      id: result.id,
+      username: result.username, 
+      email: result.email,
+    }
+  ])
+
+});
+
+
+router.get('/users/test/redis/', async function  (_, res) {
+
+  if (redisClient == null){
+    res.send({
+      "message": "test-failed"
+    }).status(500)
+  }
+  //insert random stuff into redis
+  await redisClient?.set('test', JSON.stringify([
+    {
+      "id": "test-id",
+      "name": "random"
+    },
+    {
+      "id": "test-id",
+      "name": "random"
+    }
+  ]))
+
+  const get = await redisClient?.get('test');
+  res.send(get).status(200)
+
 });
 
 router.post('/auth/login', async function  (req, res) {

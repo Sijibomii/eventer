@@ -20,17 +20,18 @@
     "setupFilesAfterEnv": [
       "./src/tests/setup.ts"
     ]
-  }, 
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^6.1.2",
     "argon2": "^0.28.5",
-    "express": "^4.17.3", 
+    "express": "^4.17.3",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
-    "reflect-metadata": "^0.1.13",
     "redis": "^4.0.4",
+    "reflect-metadata": "^0.1.13",
     "typeorm": "0.2.32",
     "uuid": "^8.3.2"
   },
