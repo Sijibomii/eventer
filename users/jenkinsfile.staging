@@ -13,41 +13,19 @@ node('workers') {
     }
   
   }
-  stage('docker-pull') {
-    sh 'docker pull sijibomi242/eventer-users-dev:latest'
+ 
+  stage('pre-pod image') {
+    sh "docker build -t sijibomi242/eventer-users-pre-prod:latest -t sijibomi242/eventer-users-pre-prod:${env.BUILD_NUMBER} -f ./users/Dockerfile.prod . "
+    sh "docker push sijibomi242/eventer-users-pre-prod:latest"
+    sh "docker push sijibomi242/eventer-users-pre-prod:${env.BUILD_NUMBER}"
   }
-  parallel(
-            // 'Quality Tests': {
-            //     sh "docker run --rm sijibomi242/eventer-users-dev npm run lint"
-            // },
-            'unit Tests': {
-                sh "docker run --rm sijibomi242/eventer-users-dev npm run test:ci"
-            }
-            // 'Coverage Reports': {
-            //     sh "docker run --rm -v $PWD/coverage:/app/coverage sijibomi242/eventer-users-dev npm run coverage-html"
-            //     publishHTML (target: [
-            //         allowMissing: false,
-            //         alwaysLinkToLastBuild: false,
-            //         keepAll: true,
-            //         reportDir: "$PWD/coverage", 
-            //         reportFiles: "index.html",
-            //         reportName: "Coverage Report"
-            //     ])
-            // }
-        )
+ 
 
-  stage ('git push pre-prod'){
-     withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
-        sh 'git config --global user.email "sijibomiolajubu@gmail.com"'
-        sh 'git config --global user.name "sijibomii"'
-        sh 'git checkout pre-prod'
-        sh 'git pull origin dev'
-        sh 'git pull'
-        //sh 'git merge dev'
-        sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.git'
-        sh 'git push origin pre-prod'
-        //notifySlack('FINISHED BUILD') 
-    }   
+    stage('deploy to kube cluster'){
+    sh "sed -i 's/eventer-users-pre-prod:latest/eventer-users-pre-prod:${env.BUILD_ID}/g' ./staging-config/users.yaml"
+    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/users.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
+  }
+  }
 
    }catch(e){
       currentBuild.result = 'FAILED' 
