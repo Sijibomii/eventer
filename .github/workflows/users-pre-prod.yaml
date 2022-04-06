@@ -1,0 +1,27 @@
+name: users:pre-prod
+on:
+  push:
+    branches:
+      - pre-prod
+    paths:
+      - 'users/**'
+  pull_request:
+    branches:
+      - pre-prod
+    paths:
+      - 'users/**'
+jobs:
+  test:
+    name: pre-prod-users
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: trigger jenkins build Job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: ${{ secrets.JENKINS_URL }} 
+          user: "username"
+          token: ${{ secrets.JENKINS_TOKEN}}
+          job: "eventer-users-pre-prod"
