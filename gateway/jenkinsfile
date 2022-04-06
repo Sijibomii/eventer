@@ -35,11 +35,6 @@ node('workers') {
   //           //     ])
   //           // }
   //       )
-  stage('pre-pod image') {
-    sh "docker build --no-cache -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gateway/Dockerfile.prod . "
-    sh "docker push sijibomi242/eventer-gateway-pre-prod:latest"
-    sh "docker push sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER}"
-  }
 
   stage ('git push pre-prod'){
      withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
@@ -54,15 +49,6 @@ node('workers') {
     }   
   } 
 
-  stage('deploy to kube cluster'){
-    sh "sed -i 's/eventer-gateway-pre-prod:latest/eventer-gateway-pre-prod:${env.BUILD_ID}/g' ./staging-config/gateway.yaml"
-    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/gateway.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
-  }
-
-  stage('integrations testing'){
-    sh 'docker build --no-cache -t eventer/gateway-test -f ./tests/integrations/gateway/Dockerfile ./tests/integrations/gateway'
-    sh "docker run --rm eventer/gateway-test npm run test:ci"
-  }
 
    }catch(e){
       currentBuild.result = 'FAILED' 

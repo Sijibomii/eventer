@@ -17,4 +17,11 @@ jobs:
     defaults:
       run:
         working-directory: .
-## trigger th ansible play book to run on the jenkins server
+    steps:
+      - name: trigger jenkins build Job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: ${{ secrets.JENKINS_URL }} 
+          user: "username"
+          token: ${{ secrets.JENKINS_TOKEN}}
+          job: "eventer-gateway-pre-prod"
