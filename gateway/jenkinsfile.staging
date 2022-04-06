@@ -1,54 +1,31 @@
 node('workers') {
 
    try{
-
      stage('checkout') {
       checkout scm
       //notifySlack('STARTED') 
       }
-
   stage('docker-login') {
     withCredentials( [usernamePassword(credentialsId: 'docker-hub',  usernameVariable: 'username', passwordVariable: 'password')]) {
       sh 'docker login -u $username -p $password '
     }
-  
   }
-  stage('docker-pull') {
-    sh 'docker pull sijibomi242/eventer-gateway-dev:latest'
+
+  stage('pre-pod image') {
+    sh "docker build --no-cache -t sijibomi242/eventer-gateway-pre-prod:latest -t sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER} -f ./gateway/Dockerfile.prod . "
+    sh "docker push sijibomi242/eventer-gateway-pre-prod:latest"
+    sh "docker push sijibomi242/eventer-gateway-pre-prod:${env.BUILD_NUMBER}"
   }
-  // parallel(
-  //           // 'Quality Tests': {
-  //           //     sh "docker run --rm sijibomi242/eventer-gateway-dev npm run lint"
-  //           // },
-  //           // 'unit Tests': {
-  //           //     sh "docker run --rm sijibomi242/eventer-gateway-dev npm run test:ci"
-  //           // }
-  //           // 'Coverage Reports': {
-  //           //     sh "docker run --rm -v $PWD/coverage:/app/coverage sijibomi242/eventer-gateway-dev npm run coverage-html"
-  //           //     publishHTML (target: [
-  //           //         allowMissing: false,
-  //           //         alwaysLinkToLastBuild: false,
-  //           //         keepAll: true,
-  //           //         reportDir: "$PWD/coverage",
-  //           //         reportFiles: "index.html",
-  //           //         reportName: "Coverage Report"
-  //           //     ])
-  //           // }
-  //       )
 
-  stage ('git push pre-prod'){
-     withCredentials( [usernamePassword(credentialsId: 'github',  usernameVariable: 'username', passwordVariable: 'password')]) {
-        sh 'git config --global user.email "sijibomiolajubu@gmail.com"'
-        sh 'git config --global user.name "sijibomii"'
-        sh 'git checkout pre-prod'
-        sh 'git pull origin dev'
-        sh 'git pull'
-        //sh 'git merge dev'
-        sh 'git remote set-url origin https://$username:$password@github.com/$username/eventer.git'
-        sh 'git push origin pre-prod'
-    }   
-  } 
+  stage('deploy to kube cluster'){
+    sh "sed -i 's/eventer-gateway-pre-prod:latest/eventer-gateway-pre-prod:${env.BUILD_ID}/g' ./staging-config/gateway.yaml"
+    step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/gateway.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
+  }
 
+  stage('integrations testing'){
+    sh 'docker build --no-cache -t eventer/gateway-test -f ./tests/integrations/gateway/Dockerfile ./tests/integrations/gateway'
+    sh "docker run --rm eventer/gateway-test npm run test:ci"
+  }
 
    }catch(e){
       currentBuild.result = 'FAILED' 
