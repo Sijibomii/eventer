@@ -10,7 +10,7 @@ describe('test gateways integration with redis', function () {
     assert.equal(data.length, 2);
     assert.deepEqual(data[0], { 
       "id": "test-id",
-      "name": "random"
+      "name": "random" 
     })
   });
 

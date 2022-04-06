@@ -19,12 +19,18 @@ router.get('/gateway/ping', pingController);
 // find a way to remove this in prod
 router.get('/gateway/test/redis', redisTestController);
 
-router.get('/gateway/test/users', userServiceTestController )
+router.get('/gateway/test/users', userServiceTestController)
 //all user routes 
-//write ip for user-srv load balancer
-// impl dns that returns ip
 
-const userServiceProxy = httpProxy('users-srv')
+const userServiceProxy = httpProxy('users-srv.staging.svc.cluster.local:80')
+
+router.get('/users/test/postgres/', function(req, res, next){
+  userServiceProxy(req, res, next)
+});
+
+router.get('/users/test/redis/', function(req, res, next){
+  userServiceProxy(req, res, next)
+});
 
 router.post('/auth/login', function(req, res, next){
   userServiceProxy(req, res, next)
@@ -34,10 +40,11 @@ router.post('/auth/signup',function(req, res, next){
   userServiceProxy(req, res, next)
 });
 //??
-router.get('/auth/me', checkAuth, returnCurrentUser); 
-//get a more detailed 
 router.get('/auth/me/detailed', checkAuth, function(req, res, next){
   userServiceProxy(req, res, next)
 });
+router.get('/auth/me', checkAuth, returnCurrentUser); 
+//get a more detailed 
+
 
 export default router;
