@@ -24,7 +24,12 @@ node('workers') {
     stage('deploy to kube cluster'){
     sh "sed -i 's/eventer-users-pre-prod:latest/eventer-users-pre-prod:${env.BUILD_ID}/g' ./staging-config/users.yaml"
     step([$class: 'KubernetesEngineBuilder', projectId: "eventer-jenkins-cluster", clusterName: "eventer-jenkins-cluster", location: "us-central1-a", manifestPattern: './staging-config/users.yaml', credentialsId: "eventer-jenkins-cluster", verifyDeployments: false])
+    }
   }
+
+  stage('integrations testing'){
+    sh 'docker build --no-cache -t eventer/users-test -f ./tests/integrations/users/Dockerfile ./tests/integrations/users'
+    sh "docker run --rm eventer/users-test npm run test:ci"
   }
 
    }catch(e){
